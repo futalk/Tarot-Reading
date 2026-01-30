@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>塔罗牌占卜 - Tarot Reading</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+    <div class="stars"></div>
+    
+    <!-- 导航菜单 -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">🔮 塔罗占卜</div>
+            <div class="nav-menu">
+                <a href="#" class="nav-link active" data-page="divination">占卜</a>
+                <a href="#" class="nav-link" data-page="daily">每日</a>
+                <a href="#" class="nav-link" data-page="gallery">图鉴</a>
+                <a href="#" class="nav-link" data-page="history">历史</a>
+                <a href="#" class="nav-link" data-page="yesno">是/否</a>
+            </div>
+            <div class="nav-controls">
+                <button class="sound-toggle" id="soundToggle" title="音效开关">
+                    🔊
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>✨ 塔罗牌占卜 ✨</h1>
+            <p class="subtitle">探索命运的奥秘，倾听内心的声音</p>
+        </header>
+
+        <main>
+            <!-- 占卜页面 -->
+            <div class="page-content" id="divinationPage">
+                <!-- 问题输入页面 -->
+                <section class="question-page" id="questionPage">
+                    <div class="card-deck">
+                        <div class="card-back"></div>
+                        <div class="card-back"></div>
+                        <div class="card-back"></div>
+                    </div>
+                    
+                    <div class="question-input-area">
+                        <h2>🤔 在心中默念你的问题</h2>
+                        <p class="question-subtitle">塔罗牌将为你指引方向</p>
+                        <textarea
+                            id="questionInput"
+                            class="question-textarea"
+                            placeholder="请输入你想要占卜的问题（可选）&#10;&#10;例如：&#10;• 我和TA的关系会如何发展？&#10;• 我应该接受这份新工作吗？&#10;• 这个月的财运如何？"
+                            rows="5"
+                        ></textarea>
+                        <p class="question-tip">💡 输入问题可以让占卜结果更有针对性，也可以留空直接开始</p>
+                        <button class="btn-confirm-question" id="confirmQuestionBtn">✨ 开始占卜</button>
+                    </div>
+                </section>
+                
+                <!-- 占卜选项页面 -->
+                <section class="intro hidden" id="intro">
+                    <h2>选择你的占卜主题</h2>
+                    
+                    <!-- 基础占卜 (3张牌) -->
+                    <div class="spread-category">
+                        <h3 class="category-title">📋 基础占卜 <span class="category-desc">（3张牌解读）</span></h3>
+                        <div class="spread-options">
+                            <button class="spread-btn" data-spread="love">
+                                <span class="spread-icon">💕</span>
+                                <span class="spread-name">爱情占卜</span>
+                                <span class="spread-desc">探索情感与关系</span>
+                            </button>
+                            <button class="spread-btn" data-spread="career">
+                                <span class="spread-icon">💼</span>
+                                <span class="spread-name">事业占卜</span>
+                                <span class="spread-desc">工作与发展方向</span>
+                            </button>
+                            <button class="spread-btn" data-spread="future">
+                                <span class="spread-icon">🔮</span>
+                                <span class="spread-name">未来预示</span>
+                                <span class="spread-desc">即将发生的事情</span>
+                            </button>
+                            <button class="spread-btn" data-spread="wealth">
+                                <span class="spread-icon">💰</span>
+                                <span class="spread-name">财运占卜</span>
+                                <span class="spread-desc">金钱与财务状况</span>
+                            </button>
+                            <button class="spread-btn" data-spread="health">
+                                <span class="spread-icon">🌿</span>
+                                <span class="spread-name">健康占卜</span>
+                                <span class="spread-desc">身心健康与能量</span>
+                            </button>
+                            <button class="spread-btn" data-spread="relationship">
+                                <span class="spread-icon">🤝</span>
+                                <span class="spread-name">人际关系</span>
+                                <span class="spread-desc">友谊·家庭·社交</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 特殊占卜 -->
+                    <div class="spread-category">
+                        <h3 class="category-title">⭐ 特殊占卜</h3>
+                        <div class="spread-options special-spreads">
+                            <button class="spread-btn spread-btn-random" data-spread="random">
+                                <span class="spread-icon">✨</span>
+                                <span class="spread-name">随机指引</span>
+                                <span class="spread-desc">1张牌 · 快速指引</span>
+                            </button>
+                            <button class="spread-btn spread-btn-celtic" data-spread="celtic">
+                                <span class="spread-icon">✝️</span>
+                                <span class="spread-name">凯尔特十字</span>
+                                <span class="spread-desc">10张牌 · 深度解读</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 洗牌阶段 -->
+                <section class="shuffle-area hidden" id="shuffleArea">
+                <h2>🔮 洗牌中...</h2>
+                <p class="instruction">请在心中默念你的问题</p>
+                <div class="shuffle-animation">
+                    <div class="shuffle-cards" id="shuffleCards"></div>
+                </div>
+                <div class="shuffle-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="shuffleProgress"></div>
+                    </div>
+                    <p class="progress-text" id="shuffleProgressText">正在洗牌... 0%</p>
+                </div>
+                <p class="shuffle-tip">💫 洗牌即将完成，请保持专注...</p>
+                </section>
+
+                <!-- 切牌阶段 -->
+                <section class="cut-area hidden" id="cutArea">
+                <h2>✂️ 切牌</h2>
+                <p class="instruction">👆 请凭直觉选择一个位置切牌（点击任意一堆）</p>
+                <div class="cut-deck" id="cutDeck">
+                    <div class="deck-part deck-left" data-position="left">
+                        <div class="deck-indicator">← 左侧</div>
+                    </div>
+                    <div class="deck-part deck-middle" data-position="middle">
+                        <div class="deck-indicator">中间</div>
+                    </div>
+                    <div class="deck-part deck-right" data-position="right">
+                        <div class="deck-indicator">右侧 →</div>
+                    </div>
+                </div>
+                <p class="cut-tip">💡 切牌反映的是你对这个问题的心态，请跟随你的第一直觉</p>
+                </section>
+
+                <!-- 抽牌阶段 -->
+                <section class="reading-area hidden" id="readingArea">
+                <h2 id="spreadTitle">🎴 请抽取你的塔罗牌</h2>
+                <p class="instruction">👆 请凭直觉点击选择塔罗牌（需要抽取 <span id="cardsNeeded" class="highlight-number">3</span> 张）</p>
+                <p class="cards-selected-info">已选择：<span id="cardsSelected" class="highlight-number">0</span> 张</p>
+                <div class="cards-container" id="cardsContainer"></div>
+                <div class="cut-card-display hidden" id="cutCardDisplay">
+                    <h3>切牌</h3>
+                    <p class="cut-card-meaning">反映你对问题的心态</p>
+                    <div id="cutCardContent"></div>
+                </div>
+                <div class="result hidden" id="result">
+                    <h3>占卜结果</h3>
+                    <div id="resultContent"></div>
+                    <div class="result-actions">
+                        <button class="btn-share" id="shareBtn">📤 分享结果</button>
+                        <button class="btn-restart" id="restartBtn">🔄 重新占卜</button>
+                        <button class="btn-back-home" id="backHomeBtn">🏠 返回首页</button>
+                    </div>
+                </div>
+                </section>
+            </div>
+            
+            <!-- 每日一牌页面 -->
+            <div class="page-content hidden" id="dailyPage">
+                <section class="daily-section">
+                    <button class="btn-back-home" data-page="divination">← 返回首页</button>
+                    <h2>🌅 每日一牌</h2>
+                    <p class="daily-subtitle">每天抽取一张塔罗牌，获得今日的指引与启示</p>
+                    
+                    <div class="daily-card-area" id="dailyCardArea">
+                        <div class="daily-date" id="dailyDate"></div>
+                        <div class="daily-card-display" id="dailyCardDisplay">
+                            <div class="daily-card-back" id="dailyCardBack">
+                                <div class="card-back-content">
+                                    <p>✨</p>
+                                    <p>点击抽取今日牌</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-daily-draw" id="dailyDrawBtn">抽取今日牌</button>
+                        
+                        <div class="daily-result hidden" id="dailyResult">
+                            <div class="daily-card-info">
+                                <div class="daily-card-symbol" id="dailyCardSymbol"></div>
+                                <h3 id="dailyCardName"></h3>
+                                <p class="daily-card-orientation" id="dailyCardOrientation"></p>
+                            </div>
+                            
+                            <div class="daily-card-description" id="dailyCardDescription"></div>
+                            
+                            <div class="daily-meanings">
+                                <div class="daily-meaning-item">
+                                    <h4>💕 爱情</h4>
+                                    <p id="dailyLove"></p>
+                                </div>
+                                <div class="daily-meaning-item">
+                                    <h4>💼 事业</h4>
+                                    <p id="dailyCareer"></p>
+                                </div>
+                                <div class="daily-meaning-item">
+                                    <h4>💰 财运</h4>
+                                    <p id="dailyWealth"></p>
+                                </div>
+                                <div class="daily-meaning-item">
+                                    <h4>🌿 健康</h4>
+                                    <p id="dailyHealth"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="daily-advice">
+                                <h4>✨ 今日建议</h4>
+                                <p id="dailyAdvice"></p>
+                            </div>
+                            
+                            <button class="btn-share" id="shareDailyBtn">📤 分享今日牌</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- 塔罗牌图鉴页面 -->
+            <div class="page-content hidden" id="galleryPage">
+                <section class="gallery-section">
+                    <button class="btn-back-home" data-page="divination">← 返回首页</button>
+                    <h2>🎴 塔罗牌图鉴</h2>
+                    <p class="gallery-subtitle">浏览全部78张塔罗牌（22张大阿尔卡纳 + 56张小阿尔卡纳）</p>
+                    
+                    <div class="gallery-filter">
+                        <button class="filter-btn active" data-filter="all">全部</button>
+                        <button class="filter-btn" data-filter="upright">正位</button>
+                        <button class="filter-btn" data-filter="reversed">逆位</button>
+                    </div>
+                    
+                    <div class="gallery-grid" id="galleryGrid"></div>
+                </section>
+            </div>
+            
+            <!-- 历史记录页面 -->
+            <div class="page-content hidden" id="historyPage">
+                <section class="history-section">
+                    <button class="btn-back-home" data-page="divination">← 返回首页</button>
+                    <h2>📜 占卜历史</h2>
+                    <p class="history-subtitle">查看你的过往占卜记录</p>
+                    
+                    <div class="history-actions">
+                        <button class="btn-clear-history" id="clearHistoryBtn">清空历史</button>
+                    </div>
+                    
+                    <div class="history-list" id="historyList">
+                        <div class="empty-history">
+                            <p>📭 暂无占卜记录</p>
+                            <p class="empty-tip">开始你的第一次占卜吧！</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- 是/否占卜页面 -->
+            <div class="page-content hidden" id="yesnoPage">
+                <section class="yesno-section">
+                    <button class="btn-back-home" data-page="divination">← 返回首页</button>
+                    <h2>🎯 是/否占卜</h2>
+                    <p class="yesno-subtitle">快速获得简单问题的答案</p>
+                    
+                    <div class="yesno-input-area">
+                        <textarea
+                            id="yesnoQuestion"
+                            class="question-textarea"
+                            placeholder="请输入你的是/否问题&#10;例如：我应该接受这份工作吗？&#10;我们会复合吗？"
+                            rows="3"
+                        ></textarea>
+                        <button class="btn-yesno-draw" id="yesnoDrawBtn">抽取答案</button>
+                    </div>
+                    
+                    <div class="yesno-result hidden" id="yesnoResult">
+                        <div class="yesno-card" id="yesnoCard"></div>
+                        <div class="yesno-answer" id="yesnoAnswer"></div>
+                        <div class="yesno-explanation" id="yesnoExplanation"></div>
+                        <button class="btn-restart" id="yesnoRestartBtn">再问一次</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer>
+            <p>塔罗牌仅供娱乐参考，命运掌握在自己手中 🌟</p>
+        </footer>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

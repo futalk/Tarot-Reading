@@ -1,0 +1,738 @@
+/* ==================== 页面切换 ==================== */
+.page-content {
+    animation: fadeIn 0.5s ease;
+}
+
+.page-content.hidden {
+    display: none;
+}
+
+/* ==================== 首页 ==================== */
+.intro {
+    text-align: center;
+    animation: fadeIn 1s ease;
+}
+
+.intro h2,
+.shuffle-area h2,
+.cut-area h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.spread-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 洗牌区域 */
+.shuffle-area {
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+    padding: 40px 20px;
+}
+
+.shuffle-tip {
+    font-size: 1rem;
+    opacity: 0.8;
+    font-style: italic;
+    margin-top: 20px;
+}
+
+/* 切牌区域 */
+.cut-area {
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+    padding: 40px 20px;
+}
+
+.cut-tip {
+    font-size: 1rem;
+    opacity: 0.8;
+    font-style: italic;
+    margin-top: 60px;
+}
+
+/* 占卜区域 */
+.reading-area {
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.reading-area h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.instruction {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 40px;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 40px 0;
+    min-height: 300px;
+    padding: 20px;
+}
+
+/* ==================== 问题输入区域 ==================== */
+/* 问题输入页面 */
+.question-page {
+    text-align: center;
+    padding: 40px 20px;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.question-input-area {
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.question-input-area h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #ffd89b;
+    text-shadow: 0 2px 10px rgba(255, 215, 155, 0.3);
+}
+
+.question-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+.question-textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.question-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.question-textarea:focus {
+    outline: none;
+    border-color: #ffd89b;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-confirm-question {
+    width: 100%;
+    margin-top: 25px;
+    padding: 18px 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 35px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.btn-confirm-question:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.btn-confirm-question:active {
+    transform: translateY(-2px);
+}
+
+.question-tip {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* ==================== 塔罗牌图鉴 ==================== */
+.gallery-section {
+    padding: 20px;
+}
+
+.gallery-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.gallery-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+.gallery-filter {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.filter-btn {
+    padding: 10px 25px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.filter-btn.active {
+    background: rgba(255, 216, 155, 0.3);
+    border-color: #ffd89b;
+    color: #ffd89b;
+}
+
+.gallery-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+/* 组别标题 */
+.gallery-group-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffd89b;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, rgba(255, 216, 155, 0.2), rgba(132, 94, 194, 0.2));
+    border-radius: 12px;
+    border-left: 5px solid #ffd89b;
+    margin-top: 20px;
+}
+
+.gallery-group-header:first-child {
+    margin-top: 0;
+}
+
+.group-icon {
+    font-size: 2rem;
+}
+
+.group-name {
+    flex: 1;
+}
+
+.group-count {
+    font-size: 1rem;
+    opacity: 0.7;
+    font-weight: normal;
+}
+
+/* 组别容器 */
+.gallery-group-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.gallery-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.gallery-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 216, 155, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-card-symbol {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.gallery-card-name {
+    font-size: 1.5rem;
+    color: #ffd89b;
+    margin-bottom: 10px;
+}
+
+.gallery-card-desc {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.gallery-card-meanings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.meaning-section {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.meaning-title {
+    font-weight: bold;
+    color: #ffd89b;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.meaning-text {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+/* ==================== 历史记录 ==================== */
+.history-section {
+    padding: 20px;
+}
+
+.history-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.history-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+.history-actions {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.btn-clear-history {
+    padding: 10px 30px;
+    background: rgba(255, 99, 99, 0.3);
+    border: 2px solid rgba(255, 99, 99, 0.5);
+    color: #fff;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.btn-clear-history:hover {
+    background: rgba(255, 99, 99, 0.5);
+    transform: translateY(-2px);
+}
+
+.history-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.empty-history {
+    text-align: center;
+    padding: 60px 20px;
+    opacity: 0.6;
+}
+
+.empty-history p {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.empty-tip {
+    font-size: 1rem;
+    font-style: italic;
+}
+
+.history-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.history-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.history-type {
+    font-size: 1.2rem;
+    color: #ffd89b;
+    font-weight: bold;
+}
+
+.history-date {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.history-question {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.history-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.history-card-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.history-card-name {
+    font-weight: bold;
+    color: #ffd89b;
+    margin-bottom: 5px;
+}
+
+/* ==================== 是/否占卜 ==================== */
+.yesno-section {
+    padding: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.yesno-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.yesno-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+.yesno-input-area {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.btn-yesno-draw {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-yesno-draw:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.yesno-result {
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.yesno-card {
+    font-size: 6rem;
+    margin: 30px 0;
+    animation: bounceIn 0.8s ease;
+}
+
+.yesno-answer {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 15px;
+    animation: fadeIn 1s ease;
+}
+
+.yesno-answer.yes {
+    background: rgba(76, 175, 80, 0.3);
+    color: #4caf50;
+}
+
+.yesno-answer.no {
+    background: rgba(244, 67, 54, 0.3);
+    color: #f44336;
+}
+
+.yesno-answer.maybe {
+    background: rgba(255, 193, 7, 0.3);
+    color: #ffc107;
+}
+
+.yesno-explanation {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+/* ==================== 每日一牌 ==================== */
+.daily-section {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.daily-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.daily-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 40px;
+}
+
+.daily-card-area {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+}
+
+.daily-date {
+    font-size: 1.3rem;
+    color: #ffd89b;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.daily-card-display {
+    margin: 30px 0;
+    min-height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.daily-card-back {
+    width: 200px;
+    height: 320px;
+    background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.daily-card-back:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.card-back-content {
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.card-back-content p:first-child {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.btn-daily-draw {
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn-daily-draw:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.btn-daily-draw:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.daily-result {
+    animation: fadeIn 0.8s ease;
+}
+
+.daily-card-info {
+    margin-bottom: 30px;
+}
+
+.daily-card-symbol {
+    font-size: 6rem;
+    margin-bottom: 15px;
+    animation: bounceIn 0.8s ease;
+}
+
+.daily-card-info h3 {
+    font-size: 2rem;
+    color: #ffd89b;
+    margin-bottom: 10px;
+}
+
+.daily-card-orientation {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.daily-card-description {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    line-height: 1.8;
+    font-style: italic;
+}
+
+.daily-meanings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.daily-meaning-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.daily-meaning-item h4 {
+    color: #ffd89b;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.daily-meaning-item p {
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.daily-advice {
+    background: linear-gradient(135deg, rgba(255, 216, 155, 0.2) 0%, rgba(102, 126, 234, 0.2) 100%);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(255, 216, 155, 0.3);
+}
+
+.daily-advice h4 {
+    color: #ffd89b;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.daily-advice p {
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+/* ==================== 响应式设计 ==================== */
+@media (max-width: 768px) {
+    .spread-options {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .cards-container {
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .question-input-area {
+        padding: 15px;
+    }
+    
+    .daily-meanings {
+        grid-template-columns: 1fr;
+    }
+    
+    .daily-card-area {
+        padding: 20px;
+    }
+}
