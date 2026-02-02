@@ -597,6 +597,63 @@
     display: inline-block;
 }
 
+/* 卡牌增强信息样式 */
+.card-enhancement {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 215, 155, 0.2);
+}
+
+.deep-meaning-section,
+.action-advice-section {
+    margin-bottom: 15px;
+}
+
+.deep-meaning-section h5,
+.action-advice-section h5 {
+    color: #ffd89b;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.deep-meaning-section p {
+    color: #e8e8e8;
+    line-height: 1.8;
+    font-size: 1.05rem;
+    text-align: justify;
+    background: rgba(138, 43, 226, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 3px solid rgba(138, 43, 226, 0.5);
+}
+
+.action-advice-section ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.action-advice-section li {
+    color: #c8e6c9;
+    line-height: 1.7;
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid rgba(76, 175, 80, 0.5);
+    position: relative;
+    padding-left: 35px;
+}
+
+.action-advice-section li::before {
+    content: '▸';
+    position: absolute;
+    left: 15px;
+    color: #81c784;
+    font-weight: bold;
+}
+
 /* 组合解读样式 */
 .combination-reading {
     background: linear-gradient(135deg, rgba(255, 215, 155, 0.15) 0%, rgba(25, 84, 123, 0.15) 100%);

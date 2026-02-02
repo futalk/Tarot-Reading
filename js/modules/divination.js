@@ -3,6 +3,7 @@ import { tarotCards } from '../data/tarot-cards.js';
 import { playSound } from './audio.js';
 import { saveToHistory } from '../utils/storage.js';
 import { detectPatterns, weaveStory } from '../utils/tarot-combinations.js';
+import { getCardEnhancement } from '../data/tarot-enhancements.js';
 
 // 全局变量
 let currentSpread = '';
@@ -377,6 +378,9 @@ function showResult() {
         
         const { position, meaning, description, isReversed } = getCardMeaning(card, index);
         
+        // 获取增强信息（深层含义和行动建议）
+        const enhancement = getCardEnhancement(card.name, isReversed);
+        
         // 如果是逆位，添加特殊样式
         const reversedStyle = isReversed ? 'style="transform: rotate(180deg); display: inline-block;"' : '';
         const reversedClass = isReversed ? 'reversed-card' : '';
@@ -386,6 +390,20 @@ function showResult() {
             <h4 class="${reversedClass}"><span ${reversedStyle}>${card.symbol}</span> ${card.name}</h4>
             <p class="card-description">${description}</p>
             <p class="card-meaning">${meaning}</p>
+            
+            <div class="card-enhancement">
+                <div class="deep-meaning-section">
+                    <h5>🔮 深层含义</h5>
+                    <p>${enhancement.deepMeaning}</p>
+                </div>
+                
+                <div class="action-advice-section">
+                    <h5>💡 行动建议</h5>
+                    <ul>
+                        ${enhancement.actionAdvice.map(advice => `<li>${advice}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
         `;
         
         resultContent.appendChild(cardResult);
@@ -639,9 +657,10 @@ function getCombinationReading() {
     return html;
 }
 
-// 获取总结
+// 获取总结（增强版，包含牌与牌的关联分析）
 function getSummary() {
-    const summaries = {
+    // 基础总结
+    const baseSummaries = {
         love: '这三张牌从爱情、事业、未来三个维度为你揭示了完整的运势。爱情需要用心经营，事业会影响感情发展，而未来掌握在你手中。记住，真爱需要双方的努力和理解。',
         career: '这三张牌从事业、感情、未来三个角度为你指明方向。事业的发展需要平衡生活各方面，感情状态会影响工作表现，而你的选择将塑造未来。保持专注，同时不要忽视生活的其他面向。',
         future: '这三张牌预示了即将发生的事情，以及对爱情和事业的影响。未来充满可能性，你的态度和行动会决定结果。保持开放的心态，积极面对即将到来的变化。',
@@ -657,7 +676,127 @@ function getSummary() {
         celtic: '凯尔特十字是塔罗占卜中最经典、最全面的牌阵。这十张牌从现状、挑战、根源、过去、可能性、未来、态度、环境、内心期待与恐惧，以及最终结果等十个维度，为你揭示了问题的全貌。第1-2张牌显示当前的处境和面临的障碍；第3-4张牌揭示问题的深层原因和过去的影响；第5-6张牌指向最好的可能和即将发生的事；第7-8张牌反映你的态度和外部环境；第9张牌揭示你内心深处的希望与恐惧；第10张牌则预示最终的结果。综合这十张牌的信息，你会对问题有更深刻的理解。记住，塔罗牌是一面镜子，它映照的是你内心的智慧。相信自己的直觉，勇敢面对，你就能找到属于自己的答案。'
     };
     
-    return summaries[currentSpread] || '愿这次占卜能为你带来启发和指引。';
+    let summary = baseSummaries[currentSpread] || '愿这次占卜能为你带来启发和指引。';
+    
+    // 添加牌与牌之间的关联分析
+    if (selectedCards.length >= 2) {
+        summary += '\n\n' + getCardsRelationshipAnalysis();
+    }
+    
+    // 根据牌阵类型调整解读风格
+    summary += '\n\n' + getSpreadStyleGuidance();
+    
+    return summary;
+}
+
+// 获取牌与牌之间的关联分析
+function getCardsRelationshipAnalysis() {
+    let analysis = '**牌与牌的关联：**\n\n';
+    
+    // 分析第一张和最后一张牌的关系（起点与终点）
+    if (selectedCards.length >= 2) {
+        const firstCard = selectedCards[0];
+        const lastCard = selectedCards[selectedCards.length - 1];
+        const firstReversed = cardOrientations[0];
+        const lastReversed = cardOrientations[cardOrientations.length - 1];
+        
+        analysis += `从${firstCard.name}${firstReversed ? '（逆位）' : ''}到${lastCard.name}${lastReversed ? '（逆位）' : ''}，`;
+        analysis += analyzeCardTransition(firstCard, lastCard, firstReversed, lastReversed);
+        analysis += '\n\n';
+    }
+    
+    // 分析中间牌的桥梁作用
+    if (selectedCards.length >= 3) {
+        const middleIndex = Math.floor(selectedCards.length / 2);
+        const middleCard = selectedCards[middleIndex];
+        const middleReversed = cardOrientations[middleIndex];
+        
+        analysis += `中间的${middleCard.name}${middleReversed ? '（逆位）' : ''}`;
+        analysis += `起到关键的桥梁作用，它连接了过去和未来，提醒你${getMiddleCardGuidance(middleCard, middleReversed)}`;
+    }
+    
+    return analysis;
+}
+
+// 分析两张牌之间的转变
+function analyzeCardTransition(card1, card2, reversed1, reversed2) {
+    const transitions = {
+        // 从挑战到成功
+        '高塔-太阳': '显示了从突然的崩塌到光明成功的转变。虽然经历了震撼，但最终会迎来喜悦和成就。',
+        '宝剑三-圣杯九': '从心碎的痛苦到愿望实现的满足，这是一个深刻的疗愈和成长过程。',
+        '恶魔-星星': '从束缚和诱惑中解脱，重新找到希望和方向。这是觉醒和疗愈的旅程。',
+        
+        // 从开始到完成
+        '愚者-世界': '代表了完整的灵性旅程，从纯真的开始到圆满的完成。你正在经历重要的成长周期。',
+        '魔术师-世界': '从掌握技能到达成圆满，你的努力和才华将带来完整的成就。',
+        
+        // 从混乱到清晰
+        '月亮-太阳': '从迷雾和不确定走向清晰和光明。真相即将揭示，困惑将被解答。',
+        '倒吊人-战车': '从暂停和等待到积极行动，时机已经成熟，是时候全力以赴了。',
+        
+        // 从失去到获得
+        '圣杯五-圣杯十': '从失落和悲伤到家庭幸福和情感圆满，这是一个疗愈和重建的过程。',
+        '星币五-星币十': '从贫困和困难到家族财富和稳定，坚持和努力会带来物质的丰盛。'
+    };
+    
+    const key = `${card1.name}-${card2.name}`;
+    if (transitions[key]) {
+        return transitions[key];
+    }
+    
+    // 通用分析
+    if (reversed1 && !reversed2) {
+        return '显示了从挑战和阻碍中走出，逐步改善的趋势。保持信心，情况正在好转。';
+    } else if (!reversed1 && reversed2) {
+        return '提醒你需要警惕，当前的顺利可能掩盖了潜在的问题。保持觉察，提前做好准备。';
+    } else if (reversed1 && reversed2) {
+        return '显示了持续的挑战，但这也是深刻转变的机会。不要放弃，黎明前的黑暗最深。';
+    } else {
+        return '显示了积极的能量流动，从一个正面状态发展到另一个正面状态。顺应这个流动，你会收获美好。';
+    }
+}
+
+// 获取中间牌的指引
+function getMiddleCardGuidance(card, isReversed) {
+    const guidances = {
+        '力量': '需要以温柔和耐心对待当前的转变过程。',
+        '节制': '需要在各方面保持平衡和调和，避免极端。',
+        '正义': '需要公正和诚实地面对所有情况，承担应有的责任。',
+        '隐士': '需要独处和反思，从内在寻找答案。',
+        '战车': '需要保持专注和决心，克服障碍前进。',
+        '恋人': '需要做出重要的选择，确保它与你的价值观一致。',
+        '魔术师': '需要运用你的技能和资源，主动创造你想要的结果。',
+        '女祭司': '需要倾听内在的智慧和直觉，相信你的第六感。'
+    };
+    
+    const guidance = guidances[card.name] || '需要深入理解这张牌的能量，它是转变的关键。';
+    
+    if (isReversed) {
+        return guidance + '（逆位提醒你可能需要调整方法或心态）';
+    }
+    
+    return guidance;
+}
+
+// 根据牌阵类型提供风格化指引
+function getSpreadStyleGuidance() {
+    const styleGuidances = {
+        'love': '**爱情指引：** 真正的爱情需要双方的努力、理解和成长。不要急于求成，让关系自然发展。记住，爱自己是爱他人的基础。',
+        'career': '**事业指引：** 成功的事业建立在热情、技能和坚持之上。保持学习和成长的心态，同时注意工作与生活的平衡。你的价值不仅仅由工作定义。',
+        'future': '**未来指引：** 未来不是固定的，而是由你当下的选择和行动创造的。保持开放和灵活，同时坚守你的核心价值观。相信过程，享受旅程。',
+        'wealth': '**财富指引：** 真正的财富包括物质、健康、关系和内心的平静。在追求物质财富的同时，不要忽视其他形式的富足。慷慨和感恩会吸引更多的丰盛。',
+        'health': '**健康指引：** 身心健康是一切的基础。倾听身体的信号，重视心理健康，建立可持续的健康习惯。记住，预防胜于治疗。',
+        'relationship': '**人际指引：** 优质的关系建立在真诚、尊重和相互支持之上。选择那些让你成为更好的自己的人，同时也成为他人的支持。质量胜于数量。',
+        'triangle': '**时间线指引：** 过去塑造了现在，现在决定着未来。从过去中学习，活在当下，为未来播种。每一刻都是新的选择机会。',
+        'elements': '**元素平衡指引：** 生活需要火（激情）、水（情感）、风（思想）、土（实际）的平衡。识别你当前缺乏或过度的元素，有意识地调整。',
+        'tree': '**生命之树指引：** 从灵性到物质，从理想到现实，生命是一个完整的系统。每个层面都重要，都需要关注和滋养。寻找你的平衡点。',
+        'relation': '**关系动态指引：** 健康的关系需要双方的觉察、沟通和成长。理解彼此的需求和期待，在差异中寻找和谐。爱是动词，需要持续的行动。',
+        'celtic': '**凯尔特十字指引：** 这个全面的牌阵揭示了问题的多个层面。综合所有信息，不要只关注单一方面。真相往往在细节中，智慧在于整合。',
+        'custom': '**自定义指引：** 你选择的牌阵反映了你独特的问题和需求。相信你的直觉，将牌的信息与你的实际情况结合。塔罗是工具，你才是决策者。',
+        'random': '**每日指引：** 这张牌是今天的能量提示。将它的智慧融入你的日常生活，观察它如何在一天中显现。小小的觉察会带来大大的改变。'
+    };
+    
+    return styleGuidances[currentSpread] || '**总体指引：** 将这次占卜的洞见融入你的生活，但记住，你始终拥有自由意志和选择权。塔罗是镜子，不是命运。';
 }
 
 // 重新开始
