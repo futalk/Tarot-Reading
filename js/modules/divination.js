@@ -8,6 +8,27 @@ import { getCombinationMeaning } from '../data/tarot-combinations.js';
 import { generateAdvancedSummary, formatAdvancedSummary } from '../advanced-summary.js';
 import { identifyContext } from '../contextual-reading.js';
 
+// 性能优化模块
+import { getCachedAdvancedSummary, summaryCache } from '../utils/performance-cache.js';
+
+// 渐进式显示模块
+import {
+    showElementProgressively,
+    showElementsProgressively,
+    createLoadingIndicator,
+    ProgressBar,
+    makeCollapsible,
+    smoothScrollTo
+} from '../utils/progressive-display.js';
+
+// 错误处理模块
+import {
+    safeExecute,
+    showErrorMessage,
+    setupGlobalErrorHandling,
+    errorHandler
+} from '../utils/error-handler.js';
+
 // 全局变量
 let currentSpread = '';
 let selectedCards = [];
@@ -35,6 +56,9 @@ const customConfig = document.getElementById('customConfig');
 
 // 初始化占卜功能
 export function initDivination() {
+    // 启用全局错误处理
+    setupGlobalErrorHandling();
+    
     // 初始化占卜类型按钮
     document.querySelectorAll('.spread-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -350,9 +374,74 @@ function selectCard(cardElement, card, index) {
     }
 }
 
-// 显示结果
-function showResult() {
-    // 先显示切牌
+// 显示结果（带错误处理和渐进式显示）
+async function showResult() {
+    try {
+        // 显示加载指示器
+        const loadingIndicator = createLoadingIndicator('正在生成深度解读...');
+        result.classList.remove('hidden');
+        resultContent.innerHTML = '';
+        resultContent.appendChild(loadingIndicator);
+        
+        // 创建进度条
+        const progressBar = new ProgressBar(resultContent, 5);
+        
+        // 步骤1: 显示切牌
+        progressBar.update(1, '解读切牌...');
+        await displayCutCard();
+        
+        // 步骤2: 显示抽到的牌
+        progressBar.update(2, '解读选中的牌...');
+        await displaySelectedCards();
+        
+        // 步骤3: 显示组合解读
+        if (selectedCards.length >= 2) {
+            progressBar.update(3, '分析牌组合...');
+            await displayCombinationReading();
+        }
+        
+        // 步骤4: 生成高级总结（使用缓存）
+        progressBar.update(4, '生成深度洞察...');
+        await displayAdvancedSummary();
+        
+        // 步骤5: 完成
+        progressBar.complete('解读完成！');
+        
+        // 移除加载指示器
+        setTimeout(() => {
+            loadingIndicator.remove();
+        }, 500);
+        
+        // 渐进式显示所有卡片结果
+        const cardResults = resultContent.querySelectorAll('.card-result');
+        await showElementsProgressively(cardResults, 150);
+        
+        // 保存到历史记录
+        saveToHistory(currentSpread, userQuestion, selectedCards, cardOrientations);
+        
+        // 清空问题输入
+        const questionInput = document.getElementById('questionInput');
+        if (questionInput) {
+            questionInput.value = '';
+            userQuestion = '';
+        }
+        
+        // 平滑滚动到结果
+        setTimeout(() => {
+            smoothScrollTo(result, 80);
+        }, 500);
+        
+    } catch (error) {
+        errorHandler.log(error, { function: 'showResult' });
+        showErrorMessage('生成解读时出现问题，请重试', 'error');
+        
+        // 降级处理：显示基础解读
+        await showBasicResult();
+    }
+}
+
+// 显示切牌
+async function displayCutCard() {
     if (cutCard) {
         cutCardDisplay.classList.remove('hidden');
         const cutMeaning = getCutCardMeaning(cutCard);
@@ -368,13 +457,16 @@ function showResult() {
                 </p>
             </div>
         `;
+        
+        // 使切牌区域可折叠
+        makeCollapsible(cutCardDisplay, '🎴 切牌解读', false);
     }
-    
-    // 显示抽到的牌
-    result.classList.remove('hidden');
-    resultContent.innerHTML = '';
-    
-    selectedCards.forEach((card, index) => {
+}
+
+// 显示选中的牌
+async function displaySelectedCards() {
+    for (let index = 0; index < selectedCards.length; index++) {
+        const card = selectedCards[index];
         const cardResult = document.createElement('div');
         cardResult.className = 'card-result';
         cardResult.style.animationDelay = `${index * 0.2}s`;
@@ -410,52 +502,77 @@ function showResult() {
         `;
         
         resultContent.appendChild(cardResult);
-    });
-    
-    // 添加组合解读（如果抽取了多张牌）
-    if (selectedCards.length >= 2) {
-        const combinationReading = getCombinationReading();
-        if (combinationReading) {
-            const comboResult = document.createElement('div');
-            comboResult.className = 'card-result combination-reading';
-            comboResult.style.animationDelay = `${selectedCards.length * 0.2}s`;
-            comboResult.innerHTML = combinationReading;
-            resultContent.appendChild(comboResult);
-        }
+        
+        // 使每张牌可折叠（默认展开前3张）
+        makeCollapsible(cardResult, `${card.symbol} ${card.name}`, index < 3);
     }
-    
-    // 生成高级总结
+}
+
+// 显示组合解读
+async function displayCombinationReading() {
+    const combinationReading = getCombinationReading();
+    if (combinationReading) {
+        const comboResult = document.createElement('div');
+        comboResult.className = 'card-result combination-reading';
+        comboResult.innerHTML = combinationReading;
+        resultContent.appendChild(comboResult);
+        
+        // 使组合解读可折叠
+        makeCollapsible(comboResult, '🔮 牌组合深度解读', true);
+    }
+}
+
+// 显示高级总结（使用缓存）
+async function displayAdvancedSummary() {
     const cardsData = selectedCards.map((card, index) => ({
         name: card.name,
         reversed: cardOrientations[index] || false
     }));
     
-    const advancedSummary = generateAdvancedSummary(cardsData, userQuestion, currentSpread);
+    // 使用缓存的高级总结
+    const advancedSummary = await safeExecute(
+        () => getCachedAdvancedSummary(cardsData, userQuestion, currentSpread),
+        () => generateAdvancedSummary(cardsData, userQuestion, currentSpread),
+        '生成高级总结时出错，使用基础版本'
+    );
+    
     const formattedSummary = formatAdvancedSummary(advancedSummary);
     
     // 添加高级总结
     const summary = document.createElement('div');
     summary.className = 'card-result advanced-summary';
-    summary.style.animationDelay = `${(selectedCards.length + 1) * 0.2}s`;
     summary.innerHTML = `
         <h4>✨ 深度解读与洞察</h4>
         <div class="summary-content">${formattedSummary.replace(/\n/g, '<br>')}</div>
     `;
     resultContent.appendChild(summary);
     
-    // 保存到历史记录
-    saveToHistory(currentSpread, userQuestion, selectedCards, cardOrientations);
+    // 使高级总结可折叠
+    makeCollapsible(summary, '✨ 深度解读与洞察', true);
+}
+
+// 降级方案：显示基础结果（无高级功能）
+async function showBasicResult() {
+    result.classList.remove('hidden');
+    resultContent.innerHTML = '<p class="error-fallback">⚠️ 正在使用简化模式显示结果...</p>';
     
-    // 清空问题输入
-    if (questionInput) {
-        questionInput.value = '';
-        userQuestion = '';
-    }
-    
-    // 滚动到结果
-    setTimeout(() => {
-        result.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 500);
+    // 显示基础的牌面解读
+    selectedCards.forEach((card, index) => {
+        const cardResult = document.createElement('div');
+        cardResult.className = 'card-result';
+        
+        const { position, meaning, description, isReversed } = getCardMeaning(card, index);
+        const reversedStyle = isReversed ? 'style="transform: rotate(180deg); display: inline-block;"' : '';
+        
+        cardResult.innerHTML = `
+            <div class="card-position">${position}</div>
+            <h4><span ${reversedStyle}>${card.symbol}</span> ${card.name}</h4>
+            <p class="card-description">${description}</p>
+            <p class="card-meaning">${meaning}</p>
+        `;
+        
+        resultContent.appendChild(cardResult);
+    });
 }
 
 // 获取切牌的含义

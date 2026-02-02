@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优化功能测试 - 塔罗牌占卜</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/mobile-optimization.css">
+    <style>
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .test-button {
+            margin: 10px 5px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .test-button:hover {
+            opacity: 0.9;
+        }
+        
+        .test-result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            min-height: 50px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-card {
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧪 优化功能测试</h1>
+            <p class="subtitle">测试性能缓存、渐进式显示、错误处理和移动端优化</p>
+        </header>
+
+        <main>
+            <!-- 测试1: 性能缓存 -->
+            <div class="test-section">
+                <h2>1️⃣ 性能缓存测试</h2>
+                <p>测试缓存机制是否正常工作，以及缓存命中率</p>
+                <button class="test-button" id="testCache1">首次生成总结</button>
+                <button class="test-button" id="testCache2">再次生成（应使用缓存）</button>
+                <button class="test-button" id="testCache3">不同参数（缓存未命中）</button>
+                <button class="test-button" id="clearCache">清除缓存</button>
+                <button class="test-button" id="showCacheStats">显示缓存统计</button>
+                <div class="test-result" id="cacheResult"></div>
+                <div class="stats" id="cacheStats"></div>
+            </div>
+
+            <!-- 测试2: 渐进式显示 -->
+            <div class="test-section">
+                <h2>2️⃣ 渐进式显示测试</h2>
+                <p>测试加载指示器、进度条和可折叠区块</p>
+                <button class="test-button" id="testLoading">显示加载指示器</button>
+                <button class="test-button" id="testProgress">显示进度条</button>
+                <button class="test-button" id="testCollapsible">创建可折叠区块</button>
+                <button class="test-button" id="testProgressive">渐进式显示元素</button>
+                <div class="test-result" id="displayResult"></div>
+            </div>
+
+            <!-- 测试3: 错误处理 -->
+            <div class="test-section">
+                <h2>3️⃣ 错误处理测试</h2>
+                <p>测试错误捕获、用户提示和降级处理</p>
+                <button class="test-button" id="testError">触发错误</button>
+                <button class="test-button" id="testWarning">显示警告</button>
+                <button class="test-button" id="testSuccess">显示成功</button>
+                <button class="test-button" id="testSafeExecute">安全执行（带降级）</button>
+                <button class="test-button" id="showErrorLog">显示错误日志</button>
+                <div class="test-result" id="errorResult"></div>
+            </div>
+
+            <!-- 测试4: 移动端优化 -->
+            <div class="test-section">
+                <h2>4️⃣ 移动端优化测试</h2>
+                <p>调整浏览器窗口大小或使用开发者工具的设备模拟器测试响应式布局</p>
+                <div class="test-result">
+                    <h4>测试项目：</h4>
+                    <ul>
+                        <li>✅ 字体大小自动调整</li>
+                        <li>✅ 按钮触摸区域增大（最小44px）</li>
+                        <li>✅ 卡片布局响应式调整</li>
+                        <li>✅ 导航菜单移动端适配</li>
+                        <li>✅ 深色模式支持（系统设置）</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #667eea;">
+                        💡 提示：打开浏览器开发者工具（F12），切换到移动设备视图进行测试
+                    </p>
+                </div>
+            </div>
+
+            <!-- 综合性能统计 -->
+            <div class="test-section">
+                <h2>📊 综合性能统计</h2>
+                <div class="stats" id="performanceStats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalTests">0</div>
+                        <div class="stat-label">总测试次数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="cacheHitRate">0%</div>
+                        <div class="stat-label">缓存命中率</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgResponseTime">0ms</div>
+                        <div class="stat-label">平均响应时间</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="errorCount">0</div>
+                        <div class="stat-label">错误次数</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { summaryCache, getCachedAdvancedSummary } from './js/utils/performance-cache.js';
+        import { 
+            createLoadingIndicator, 
+            ProgressBar, 
+            makeCollapsible,
+            showElementProgressively,
+            showElementsProgressively
+        } from './js/utils/progressive-display.js';
+        import { 
+            showErrorMessage, 
+            safeExecute, 
+            errorHandler,
+            setupGlobalErrorHandling
+        } from './js/utils/error-handler.js';
+        import { generateAdvancedSummary } from './js/advanced-summary.js';
+
+        // 启用全局错误处理
+        setupGlobalErrorHandling();
+
+        // 测试数据
+        const testCards1 = [
+            { name: '愚者', reversed: false },
+            { name: '魔术师', reversed: false },
+            { name: '女祭司', reversed: true }
+        ];
+
+        const testCards2 = [
+            { name: '皇帝', reversed: false },
+            { name: '教皇', reversed: true }
+        ];
+
+        let testCount = 0;
+        let responseTimes = [];
+
+        // 测试1: 缓存功能
+        document.getElementById('testCache1').addEventListener('click', async () => {
+            const start = performance.now();
+            const result = await getCachedAdvancedSummary(testCards1, '测试问题1', 'love');
+            const duration = performance.now() - start;
+            
+            responseTimes.push(duration);
+            testCount++;
+            
+            document.getElementById('cacheResult').innerHTML = `
+                <strong>首次生成：</strong><br>
+                耗时: ${duration.toFixed(2)}ms<br>
+                缓存状态: ${summaryCache.stats().size} 项已缓存
+            `;
+            updateStats();
+        });
+
+        document.getElementById('testCache2').addEventListener('click', async () => {
+            const start = performance.now();
+            const result = await getCachedAdvancedSummary(testCards1, '测试问题1', 'love');
+            const duration = performance.now() - start;
+            
+            responseTimes.push(duration);
+            testCount++;
+            
+            document.getElementById('cacheResult').innerHTML = `
+                <strong>再次生成（使用缓存）：</strong><br>
+                耗时: ${duration.toFixed(2)}ms<br>
+                <span style="color: green;">⚡ 速度提升: ${((responseTimes[0] / duration - 1) * 100).toFixed(0)}%</span>
+            `;
+            updateStats();
+        });
+
+        document.getElementById('testCache3').addEventListener('click', async () => {
+            const start = performance.now();
+            const result = await getCachedAdvancedSummary(testCards2, '测试问题2', 'career');
+            const duration = performance.now() - start;
+            
+            responseTimes.push(duration);
+            testCount++;
+            
+            document.getElementById('cacheResult').innerHTML = `
+                <strong>不同参数（缓存未命中）：</strong><br>
+                耗时: ${duration.toFixed(2)}ms<br>
+                缓存状态: ${summaryCache.stats().size} 项已缓存
+            `;
+            updateStats();
+        });
+
+        document.getElementById('clearCache').addEventListener('click', () => {
+            summaryCache.clear();
+            document.getElementById('cacheResult').innerHTML = `
+                <strong>✅ 缓存已清除</strong><br>
+                当前缓存: ${summaryCache.stats().size} 项
+            `;
+            updateStats();
+        });
+
+        document.getElementById('showCacheStats').addEventListener('click', () => {
+            const stats = summaryCache.stats();
+            document.getElementById('cacheStats').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${stats.size}</div>
+                    <div class="stat-label">缓存项数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.hits}</div>
+                    <div class="stat-label">缓存命中</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.misses}</div>
+                    <div class="stat-label">缓存未命中</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.hitRate}%</div>
+                    <div class="stat-label">命中率</div>
+                </div>
+            `;
+        });
+
+        // 测试2: 渐进式显示
+        document.getElementById('testLoading').addEventListener('click', () => {
+            const result = document.getElementById('displayResult');
+            result.innerHTML = '';
+            const loading = createLoadingIndicator('正在加载测试数据...');
+            result.appendChild(loading);
+            
+            setTimeout(() => {
+                loading.remove();
+                result.innerHTML = '<p style="color: green;">✅ 加载完成！</p>';
+            }, 3000);
+        });
+
+        document.getElementById('testProgress').addEventListener('click', async () => {
+            const result = document.getElementById('displayResult');
+            result.innerHTML = '';
+            
+            const progressBar = new ProgressBar(result, 5);
+            
+            for (let i = 1; i <= 5; i++) {
+                await new Promise(resolve => setTimeout(resolve, 800));
+                progressBar.update(i, `步骤 ${i}/5 完成`);
+            }
+            
+            progressBar.complete('全部完成！');
+        });
+
+        document.getElementById('testCollapsible').addEventListener('click', () => {
+            const result = document.getElementById('displayResult');
+            result.innerHTML = `
+                <div id="collapsibleTest">
+                    <p>这是一段可折叠的内容。点击标题可以展开或收起。</p>
+                    <p>支持默认展开或收起状态。</p>
+                    <p>适合用于长篇解读内容的组织。</p>
+                </div>
+            `;
+            
+            const testDiv = document.getElementById('collapsibleTest');
+            makeCollapsible(testDiv, '📦 可折叠区块示例', true);
+        });
+
+        document.getElementById('testProgressive').addEventListener('click', async () => {
+            const result = document.getElementById('displayResult');
+            result.innerHTML = '';
+            
+            for (let i = 1; i <= 5; i++) {
+                const div = document.createElement('div');
+                div.style.padding = '10px';
+                div.style.margin = '5px 0';
+                div.style.background = '#f0f0f0';
+                div.style.borderRadius = '5px';
+                div.textContent = `元素 ${i}`;
+                result.appendChild(div);
+            }
+            
+            const elements = result.querySelectorAll('div');
+            await showElementsProgressively(elements, 200);
+        });
+
+        // 测试3: 错误处理
+        document.getElementById('testError').addEventListener('click', () => {
+            showErrorMessage('这是一个错误提示示例', 'error');
+        });
+
+        document.getElementById('testWarning').addEventListener('click', () => {
+            showErrorMessage('这是一个警告提示示例', 'warning');
+        });
+
+        document.getElementById('testSuccess').addEventListener('click', () => {
+            showErrorMessage('操作成功完成！', 'success');
+        });
+
+        document.getElementById('testSafeExecute').addEventListener('click', async () => {
+            const result = await safeExecute(
+                () => {
+                    throw new Error('模拟错误');
+                },
+                () => {
+                    return '使用降级方案的结果';
+                },
+                '主要操作失败'
+            );
+            
+            document.getElementById('errorResult').innerHTML = `
+                <strong>安全执行结果：</strong><br>
+                ${result}
+            `;
+        });
+
+        document.getElementById('showErrorLog').addEventListener('click', () => {
+            const errors = errorHandler.getErrors();
+            document.getElementById('errorResult').innerHTML = `
+                <strong>错误日志（最近${errors.length}条）：</strong><br>
+                ${errors.length === 0 ? '暂无错误' : errors.map((e, i) => 
+                    `${i + 1}. ${e.message} (${e.type}) - ${new Date(e.timestamp).toLocaleTimeString()}`
+                ).join('<br>')}
+            `;
+        });
+
+        // 更新统计
+        function updateStats() {
+            document.getElementById('totalTests').textContent = testCount;
+            
+            const stats = summaryCache.stats();
+            document.getElementById('cacheHitRate').textContent = stats.hitRate + '%';
+            
+            if (responseTimes.length > 0) {
+                const avg = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+                document.getElementById('avgResponseTime').textContent = avg.toFixed(2) + 'ms';
+            }
+            
+            document.getElementById('errorCount').textContent = errorHandler.getErrors().length;
+        }
+
+        // 初始化统计
+        updateStats();
+    </script>
+</body>
+</html>
