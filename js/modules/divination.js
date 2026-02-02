@@ -274,8 +274,12 @@ function updateSelectedCount() {
 function createCardDeck() {
     cardsContainer.innerHTML = '';
     
+    // 根据占卜类型决定展示的卡牌数量
+    // 规则：需要抽取的牌数 × 2（至少10张，最多30张）
+    const displayCount = Math.min(Math.max(cardsToSelect * 2, 10), 30);
+    
     // 使用已洗好的牌
-    const cardsToShow = shuffledDeck.slice(0, 10); // 显示10张供选择
+    const cardsToShow = shuffledDeck.slice(0, displayCount);
     
     cardsToShow.forEach((card, index) => {
         const cardElement = document.createElement('div');
