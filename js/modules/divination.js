@@ -2,6 +2,7 @@
 import { tarotCards } from '../data/tarot-cards.js';
 import { playSound } from './audio.js';
 import { saveToHistory } from '../utils/storage.js';
+import { detectPatterns, weaveStory } from '../utils/tarot-combinations.js';
 
 // 全局变量
 let currentSpread = '';
@@ -390,10 +391,22 @@ function showResult() {
         resultContent.appendChild(cardResult);
     });
     
+    // 添加组合解读（如果抽取了多张牌）
+    if (selectedCards.length >= 2) {
+        const combinationReading = getCombinationReading();
+        if (combinationReading) {
+            const comboResult = document.createElement('div');
+            comboResult.className = 'card-result combination-reading';
+            comboResult.style.animationDelay = `${selectedCards.length * 0.2}s`;
+            comboResult.innerHTML = combinationReading;
+            resultContent.appendChild(comboResult);
+        }
+    }
+    
     // 添加总结
     const summary = document.createElement('div');
     summary.className = 'card-result';
-    summary.style.animationDelay = `${selectedCards.length * 0.2}s`;
+    summary.style.animationDelay = `${(selectedCards.length + 1) * 0.2}s`;
     summary.innerHTML = `
         <h4>✨ 占卜总结</h4>
         <p>${getSummary()}</p>
@@ -555,6 +568,75 @@ function getRandomGuidance() {
     ];
     
     return guidances[Math.floor(Math.random() * guidances.length)];
+}
+
+// 获取组合解读
+function getCombinationReading() {
+    // 检测牌阵模式
+    const patterns = detectPatterns(selectedCards, cardOrientations);
+    
+    // 编织故事
+    const story = weaveStory(selectedCards, cardOrientations, currentSpread, patterns);
+    
+    let html = '<h4>🔮 深度解读：牌与牌的对话</h4>';
+    
+    // 开篇
+    if (story.opening) {
+        html += `<div class="story-section">
+            <p class="story-opening"><strong>${story.opening}</strong></p>
+        </div>`;
+    }
+    
+    // 发展：牌之间的关系
+    if (story.development && story.development.length > 0) {
+        html += '<div class="story-section">';
+        story.development.forEach(relation => {
+            if (relation.message) {
+                html += `<p class="story-development">📖 ${relation.message}</p>`;
+            }
+        });
+        html += '</div>';
+    }
+    
+    // 高潮：关键转折
+    if (story.climax) {
+        html += `<div class="story-section">
+            <p class="story-climax"><strong>⚡ 关键时刻：</strong>${story.climax}</p>
+        </div>`;
+    }
+    
+    // 结局
+    if (story.resolution) {
+        html += `<div class="story-section">
+            <p class="story-resolution"><strong>🎯 最终走向：</strong>${story.resolution}</p>
+        </div>`;
+    }
+    
+    // 深层洞察
+    if (story.deepInsight) {
+        html += `<div class="story-section deep-insight">
+            ${story.deepInsight.split('\n').map(line => line.trim() ? `<p>${line}</p>` : '').join('')}
+        </div>`;
+    }
+    
+    // 行动建议
+    if (story.actionSteps && story.actionSteps.length > 0) {
+        html += '<div class="story-section action-steps">';
+        html += '<p><strong>💡 行动建议：</strong></p>';
+        html += '<ul>';
+        story.actionSteps.forEach(step => {
+            const priorityIcon = {
+                'high': '🔴',
+                'medium': '🟡',
+                'long-term': '🟢'
+            };
+            html += `<li>${priorityIcon[step.priority] || '•'} ${step.action}</li>`;
+        });
+        html += '</ul>';
+        html += '</div>';
+    }
+    
+    return html;
 }
 
 // 获取总结
