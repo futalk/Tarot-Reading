@@ -4,6 +4,9 @@ import { playSound } from './audio.js';
 import { saveToHistory } from '../utils/storage.js';
 import { detectPatterns, weaveStory } from '../utils/tarot-combinations.js';
 import { getCardEnhancement } from '../data/tarot-enhancements.js';
+import { getCombinationMeaning } from '../data/tarot-combinations.js';
+import { generateAdvancedSummary, formatAdvancedSummary } from '../advanced-summary.js';
+import { identifyContext } from '../contextual-reading.js';
 
 // 全局变量
 let currentSpread = '';
@@ -421,13 +424,22 @@ function showResult() {
         }
     }
     
-    // 添加总结
+    // 生成高级总结
+    const cardsData = selectedCards.map((card, index) => ({
+        name: card.name,
+        reversed: cardOrientations[index] || false
+    }));
+    
+    const advancedSummary = generateAdvancedSummary(cardsData, userQuestion, currentSpread);
+    const formattedSummary = formatAdvancedSummary(advancedSummary);
+    
+    // 添加高级总结
     const summary = document.createElement('div');
-    summary.className = 'card-result';
+    summary.className = 'card-result advanced-summary';
     summary.style.animationDelay = `${(selectedCards.length + 1) * 0.2}s`;
     summary.innerHTML = `
-        <h4>✨ 占卜总结</h4>
-        <p>${getSummary()}</p>
+        <h4>✨ 深度解读与洞察</h4>
+        <div class="summary-content">${formattedSummary.replace(/\n/g, '<br>')}</div>
     `;
     resultContent.appendChild(summary);
     
