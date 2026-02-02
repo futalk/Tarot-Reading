@@ -4,6 +4,7 @@ import { generateGallery } from './gallery.js';
 import { loadHistory } from './history.js';
 import { initDailyCard } from './daily-card.js';
 import { resetGuided } from './guided.js';
+import { resetLearn } from './learn.js';
 
 // 页面元素
 const pages = {
@@ -12,7 +13,8 @@ const pages = {
     gallery: document.getElementById('galleryPage'),
     history: document.getElementById('historyPage'),
     yesno: document.getElementById('yesnoPage'),
-    daily: document.getElementById('dailyPage')
+    daily: document.getElementById('dailyPage'),
+    learn: document.getElementById('learnPage')
 };
 
 // 初始化导航
@@ -77,6 +79,9 @@ export function switchPage(targetPage) {
             break;
         case 'guided':
             resetGuided();
+            break;
+        case 'learn':
+            resetLearn();
             break;
     }
 }

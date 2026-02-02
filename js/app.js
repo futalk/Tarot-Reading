@@ -8,6 +8,7 @@ import { initDivination, getReadingData } from './modules/divination.js';
 import { initDailyCard } from './modules/daily-card.js';
 import { initShareButtons } from './modules/share.js';
 import { initGuided } from './modules/guided.js';
+import { initLearn } from './modules/learn.js';
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDivination();
     initDailyCard();
     initGuided();
+    initLearn();
     initShareButtons(getReadingData);
     
     // 添加页面加载动画

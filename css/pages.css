@@ -31,13 +31,22 @@
 .intro {
     text-align: center;
     animation: fadeIn 1s ease;
+    padding: 20px;
 }
 
-.intro h2,
+.intro h2 {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    color: #ffd89b;
+    text-shadow: 0 3px 15px rgba(255, 215, 155, 0.4);
+    letter-spacing: 2px;
+}
+
 .shuffle-area h2,
 .cut-area h2 {
     font-size: 2rem;
     margin-bottom: 30px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .spread-options {
@@ -502,6 +511,149 @@
 }
 
 /* ==================== 历史记录 ==================== */
+/* ==================== 历史记录详情弹窗 ==================== */
+.history-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.history-detail-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideInUp 0.3s ease;
+}
+
+.btn-close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-close-modal:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.history-detail-content h2 {
+    color: #ffd89b;
+    margin-bottom: 10px;
+}
+
+.detail-date {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+}
+
+.detail-question {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.detail-question h3 {
+    color: #ffd89b;
+    margin-bottom: 10px;
+}
+
+.detail-question p {
+    color: white;
+    line-height: 1.6;
+}
+
+.detail-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.detail-card-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 4px solid #ffd89b;
+}
+
+.detail-card-item h3 {
+    color: #ffd89b;
+    margin-bottom: 10px;
+}
+
+.detail-position {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.detail-description {
+    color: rgba(255, 255, 255, 0.9);
+    font-style: italic;
+    margin-bottom: 15px;
+    padding-left: 15px;
+    border-left: 3px solid rgba(255, 215, 155, 0.3);
+}
+
+.detail-meanings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detail-meaning {
+    color: white;
+    line-height: 1.6;
+}
+
+.detail-meaning strong {
+    color: #ffd89b;
+}
+
+.btn-view-detail {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    font-weight: bold;
+}
+
+.btn-view-detail:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* ==================== 历史记录页面 ==================== */
 .history-section {
     padding: 20px;
 }
@@ -880,6 +1032,34 @@
 
 /* ==================== 响应式设计 ==================== */
 @media (max-width: 768px) {
+    /* 历史记录详情弹窗 */
+    .history-detail-content {
+        padding: 30px 20px;
+        max-height: 95vh;
+    }
+    
+    .btn-close-modal {
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+    }
+    
+    .detail-card-item {
+        padding: 20px 15px;
+    }
+    
+    /* 结果按钮 */
+    .result-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .result-actions button {
+        width: 100%;
+    }
+    
     .spread-options {
         grid-template-columns: 1fr;
         gap: 20px;
@@ -905,4 +1085,957 @@
     .daily-card-area {
         padding: 20px;
     }
+}
+
+/* ==================== 学习中心 ==================== */
+.learn-section {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.learn-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.learn-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 40px;
+}
+
+/* 学习模块卡片 */
+.learn-modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.learn-module-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.learn-module-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 216, 155, 0.5);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.module-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.learn-module-card h3 {
+    font-size: 1.8rem;
+    color: #ffd89b;
+    margin-bottom: 15px;
+}
+
+.module-description {
+    font-size: 1rem;
+    opacity: 0.9;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.btn-module {
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.btn-module:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* 返回学习中心按钮 */
+.btn-back-to-modules {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-back-to-modules:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateX(-3px);
+}
+
+/* ==================== 牌义百科 ==================== */
+.encyclopedia-content {
+    animation: fadeIn 0.5s ease;
+}
+
+.encyclopedia-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.encyclopedia-header h3 {
+    font-size: 2rem;
+    color: #ffd89b;
+    margin-bottom: 10px;
+}
+
+.encyclopedia-search {
+    max-width: 500px;
+    margin: 0 auto 30px auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #ffd89b;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.encyclopedia-filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.encyclopedia-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.encyclopedia-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.encyclopedia-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 216, 155, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card-symbol-large {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.encyclopedia-card h4 {
+    font-size: 1.3rem;
+    color: #ffd89b;
+    margin-bottom: 10px;
+}
+
+.card-brief {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.btn-view-card {
+    padding: 8px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-view-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* 牌详情弹窗 */
+.card-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.card-detail-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideInUp 0.3s ease;
+}
+
+.card-detail-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.card-symbol-huge {
+    font-size: 6rem;
+    margin-bottom: 15px;
+}
+
+.card-detail-header h2 {
+    font-size: 2.5rem;
+    color: #ffd89b;
+}
+
+.card-detail-description {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.card-detail-description h3 {
+    color: #ffd89b;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.card-detail-description p {
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+.card-detail-meanings {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.meaning-section {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.meaning-section h3 {
+    color: #ffd89b;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.meaning-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.meaning-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.meaning-item strong {
+    color: #ffd89b;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.meaning-item p {
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* ==================== 互动练习 ==================== */
+.practice-content {
+    animation: fadeIn 0.5s ease;
+}
+
+.practice-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.practice-header h3 {
+    font-size: 2rem;
+    color: #ffd89b;
+    margin-bottom: 10px;
+}
+
+.practice-modes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.practice-mode-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.practice-mode-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 216, 155, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.practice-mode-card h4 {
+    font-size: 1.5rem;
+    color: #ffd89b;
+    margin-bottom: 15px;
+}
+
+.practice-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffd89b;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+.btn-start-practice {
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.btn-start-practice:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* 练习游戏界面 */
+.practice-game {
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+.game-progress {
+    font-size: 1.2rem;
+    color: #ffd89b;
+}
+
+.game-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffd89b;
+}
+
+.btn-quit-game {
+    padding: 8px 20px;
+    background: rgba(255, 99, 99, 0.3);
+    border: 1px solid rgba(255, 99, 99, 0.5);
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-quit-game:hover {
+    background: rgba(255, 99, 99, 0.5);
+}
+
+.game-question-area {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.game-question-area p {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.question-symbol {
+    font-size: 8rem;
+    margin: 30px 0;
+}
+
+.game-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.game-option {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.game-option:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.game-option:disabled {
+    cursor: not-allowed;
+}
+
+.game-option.correct {
+    background: rgba(76, 175, 80, 0.3);
+    border-color: #4caf50;
+    color: #4caf50;
+}
+
+.game-option.wrong {
+    background: rgba(244, 67, 54, 0.3);
+    border-color: #f44336;
+    color: #f44336;
+}
+
+.game-feedback {
+    text-align: center;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.feedback-correct {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+}
+
+.feedback-wrong {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+}
+
+.feedback-icon {
+    font-size: 2rem;
+    margin-right: 10px;
+}
+
+.btn-next-question {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.btn-next-question:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* 练习结果 */
+.practice-result {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.result-summary {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 30px;
+}
+
+.result-summary h3 {
+    font-size: 2rem;
+    color: #ffd89b;
+    margin-bottom: 30px;
+}
+
+.result-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.result-stat-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.result-stat-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ffd89b;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.result-stat-label {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.result-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-restart-practice,
+.btn-back-to-practice {
+    padding: 15px 30px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.btn-restart-practice {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.btn-back-to-practice {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-restart-practice:hover,
+.btn-back-to-practice:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* ==================== 塔罗课程 ==================== */
+.course-content {
+    animation: fadeIn 0.5s ease;
+}
+
+.course-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.course-header h3 {
+    font-size: 2rem;
+    color: #ffd89b;
+    margin-bottom: 10px;
+}
+
+.course-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.course-category {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 30px;
+}
+
+.course-category h4 {
+    font-size: 1.8rem;
+    color: #ffd89b;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 216, 155, 0.3);
+}
+
+.course-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.course-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.course-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 216, 155, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.course-item h5 {
+    font-size: 1.3rem;
+    color: #ffd89b;
+    margin-bottom: 10px;
+}
+
+.course-item p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.btn-view-course {
+    padding: 10px 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-view-course:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* 课程详情弹窗 */
+.course-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.course-detail-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideInUp 0.3s ease;
+}
+
+.course-detail-content h2 {
+    color: #ffd89b;
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+.course-detail-content h4 {
+    color: #ffd89b;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+.course-detail-content h5 {
+    color: rgba(255, 216, 155, 0.9);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.course-detail-content p {
+    line-height: 1.8;
+    margin-bottom: 15px;
+    font-size: 1.05rem;
+}
+
+.course-detail-content ul,
+.course-detail-content ol {
+    margin-left: 25px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+.course-detail-content li {
+    margin-bottom: 10px;
+}
+
+/* ==================== 响应式设计 - 学习中心 ==================== */
+@media (max-width: 768px) {
+    .learn-modules {
+        grid-template-columns: 1fr;
+    }
+    
+    .encyclopedia-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    .card-detail-content,
+    .course-detail-content {
+        padding: 30px 20px;
+    }
+    
+    .card-symbol-huge {
+        font-size: 4rem;
+    }
+    
+    .meaning-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .practice-modes {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .result-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .result-actions {
+        flex-direction: column;
+    }
+    
+    .result-actions button {
+        width: 100%;
+    }
+    
+    .course-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .question-symbol {
+        font-size: 5rem;
+    }
+}
+
+/* ==================== 自定义牌阵配置 ==================== */
+.custom-config {
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.custom-config h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.config-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.form-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #ffd89b;
+    font-weight: bold;
+}
+
+.form-group input[type="number"] {
+    width: 100px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="number"]:focus {
+    outline: none;
+    border-color: #ffd89b;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.form-hint {
+    margin-left: 10px;
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.custom-positions {
+    display: grid;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.position-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.position-input label {
+    min-width: 80px;
+    margin: 0;
+    font-size: 1rem;
+    color: white;
+}
+
+.position-input input {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.position-input input:focus {
+    outline: none;
+    border-color: #ffd89b;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.config-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.config-actions button {
+    flex: 1;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
 }

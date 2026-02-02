@@ -12,6 +12,7 @@ let cutCardReversed = false;
 let shuffledDeck = [];
 let cardOrientations = [];
 let userQuestion = '';
+let customSpreadConfig = null; // 自定义牌阵配置
 
 // DOM元素
 const intro = document.getElementById('intro');
@@ -25,6 +26,7 @@ const resultContent = document.getElementById('resultContent');
 const cutCardDisplay = document.getElementById('cutCardDisplay');
 const cutCardContent = document.getElementById('cutCardContent');
 const restartBtn = document.getElementById('restartBtn');
+const customConfig = document.getElementById('customConfig');
 
 // 初始化占卜功能
 export function initDivination() {
@@ -32,9 +34,18 @@ export function initDivination() {
     document.querySelectorAll('.spread-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             currentSpread = btn.dataset.spread;
-            startReading();
+            
+            // 如果是自定义牌阵，显示配置界面
+            if (currentSpread === 'custom') {
+                showCustomConfig();
+            } else {
+                startReading();
+            }
         });
     });
+    
+    // 自定义牌阵配置
+    initCustomConfig();
     
     // "引导占卜"链接
     const linkToGuided = document.querySelector('.link-to-guided');
@@ -58,7 +69,21 @@ export function initDivination() {
         });
     }
     
-    // 重新开始按钮
+    // 再次占卜按钮（同类型）
+    const repeatBtn = document.getElementById('repeatBtn');
+    if (repeatBtn) {
+        repeatBtn.addEventListener('click', () => {
+            playSound('select');
+            // 保持当前占卜类型，重新开始
+            if (currentSpread) {
+                startReading();
+            } else {
+                restart();
+            }
+        });
+    }
+    
+    // 重新开始按钮（更换类型）
     if (restartBtn) {
         restartBtn.addEventListener('click', restart);
     }
@@ -72,12 +97,6 @@ export function initDivination() {
         });
     }
     
-    // 问题输入
-    if (questionInput) {
-        questionInput.addEventListener('input', (e) => {
-            userQuestion = e.target.value;
-        });
-    }
 }
 
 // 开始占卜 - 进入洗牌阶段
@@ -95,6 +114,17 @@ function startReading() {
         cardsToSelect = 1;
     } else if (currentSpread === 'celtic') {
         cardsToSelect = 10;
+    } else if (currentSpread === 'triangle') {
+        cardsToSelect = 3;
+    } else if (currentSpread === 'elements') {
+        cardsToSelect = 4;
+    } else if (currentSpread === 'tree') {
+        cardsToSelect = 10;
+    } else if (currentSpread === 'relation') {
+        cardsToSelect = 7;
+    } else if (currentSpread === 'custom') {
+        // 自定义牌阵的数量已在配置时设置
+        // cardsToSelect 已经在 confirmCustomBtn 的事件处理中设置
     } else {
         cardsToSelect = 3;
     }
@@ -433,6 +463,41 @@ function getCardMeaning(card, index) {
             positions: ['🤝 人际运势', '💼 工作关系', '🔮 未来发展'],
             aspects: ['relationship', 'career', 'future']
         },
+        triangle: {
+            positions: ['🔺 过去 - 问题的起源', '🔺 现在 - 当前状况', '🔺 未来 - 发展趋势'],
+            aspects: ['future', 'career', 'love']
+        },
+        elements: {
+            positions: ['🔥 火 - 行动与激情', '💧 水 - 情感与直觉', '💨 风 - 思想与沟通', '🌍 土 - 物质与现实'],
+            aspects: ['career', 'love', 'relationship', 'wealth']
+        },
+        tree: {
+            positions: [
+                '👑 王冠 - 最高理想',
+                '💡 智慧 - 创造力',
+                '🧠 理解 - 接受力',
+                '💝 慈悲 - 给予',
+                '⚖️ 严厉 - 限制',
+                '✨ 美丽 - 和谐',
+                '🏆 胜利 - 行动',
+                '🌟 荣耀 - 思想',
+                '🌊 基础 - 潜意识',
+                '🏰 王国 - 现实'
+            ],
+            aspects: ['future', 'career', 'love', 'relationship', 'career', 'love', 'career', 'relationship', 'love', 'wealth']
+        },
+        relation: {
+            positions: [
+                '💑 你的状态 - 你在关系中的位置',
+                '💑 对方的状态 - 对方的感受',
+                '💭 你的期待 - 你对关系的期望',
+                '💭 对方的期待 - 对方的期望',
+                '💪 关系优势 - 你们的长处',
+                '⚠️ 关系挑战 - 需要克服的困难',
+                '🔮 关系未来 - 发展方向'
+            ],
+            aspects: ['love', 'love', 'relationship', 'relationship', 'love', 'career', 'future']
+        },
         celtic: {
             positions: [
                 '1️⃣ 现状 - 当前处境',
@@ -460,6 +525,10 @@ function getCardMeaning(card, index) {
         // 添加额外的综合指引
         const guidance = getRandomGuidance();
         meaning = `${meaning}\n\n${guidance}`;
+    } else if (currentSpread === 'custom' && customSpreadConfig) {
+        // 使用自定义牌阵配置
+        position = customSpreadConfig.positions[index] + orientationText;
+        meaning = card[orientation][customSpreadConfig.aspects[index]];
     } else {
         const config = spreadConfig[currentSpread];
         if (config) {
@@ -493,6 +562,11 @@ function getSummary() {
         wealth: '这三张牌从财运、事业、未来三个角度为你揭示财务状况。财富的积累需要智慧和耐心,事业发展直接影响收入，而长远规划决定财务自由。记住，金钱是工具，不是目的，合理理财才能带来真正的富足。',
         health: '这三张牌从健康、情绪、未来三个维度为你指引养生之道。身心健康是一切的基础，情绪状态影响身体机能，而良好的生活习惯决定未来的健康。倾听身体的声音，保持身心平衡。',
         relationship: '这三张牌从人际关系、工作关系、未来发展三个角度为你揭示社交运势。真诚和善意是人际交往的基础，职场关系需要智慧经营，而你对待他人的方式将塑造未来的人脉。记住，良好的关系需要用心维护。',
+        triangle: '三角牌阵是最简洁而深刻的时间线牌阵。这三张牌从过去、现在、未来三个时间维度，为你揭示事物的发展脉络。第一张牌显示问题的起源和根基；第二张牌反映当前的状况和能量；第三张牌指向未来的发展趋势。过去塑造了现在，现在决定着未来。理解这条时间线，你就能更好地把握当下，创造理想的未来。记住，未来不是注定的，而是由你此刻的选择所创造。',
+        elements: '四要素牌阵源于古老的自然哲学，代表构成世界的四大元素。这四张牌分别揭示火（行动与激情）、水（情感与直觉）、风（思想与沟通）、土（物质与现实）四个层面的能量状态。火元素显示你的动力和热情；水元素反映你的情感和内在感受；风元素揭示你的思维模式和沟通方式；土元素指向物质层面和实际状况。只有当四大元素达到平衡，生活才能和谐圆满。观察哪个元素最强或最弱，这将指引你如何调整能量，实现内在的平衡。',
+        tree: '生命之树牌阵是卡巴拉神秘学中最神圣的符号，代表宇宙的创造过程和人类意识的层次。这十张牌对应生命之树的十个质点，从最高的灵性理想到最底层的物质现实，完整地映照出你生命的全景。王冠代表你的最高理想和灵性追求；智慧与理解是创造力和接受力的平衡；慈悲与严厉是给予和限制的对立统一；美丽是中心的和谐点；胜利与荣耀是行动和思想的双翼；基础是潜意识的深层力量；王国则是一切在物质世界的显化。这十张牌共同编织出你生命的蓝图，揭示从灵性到物质、从理想到现实的完整路径。静心冥想每一张牌的含义，你会发现生命的奥秘和前进的方向。',
+        relation: '关系牌阵专门用于探索两个人之间的互动模式和关系动态。这七张牌从多个角度全面剖析关系的现状和未来。第1-2张牌分别显示你和对方在关系中的状态和感受；第3-4张牌揭示双方对关系的期待和需求；第5张牌指出关系的优势和闪光点；第6张牌揭示需要面对的挑战和困难；第7张牌预示关系的发展方向。任何关系都需要双方的理解和努力，通过这个牌阵，你可以更清楚地看到彼此的立场，找到改善关系的方法。记住，健康的关系建立在相互尊重、理解和沟通的基础上。',
+        custom: `你选择了自定义牌阵，这${cardsToSelect}张牌按照你设定的牌位为你揭示了问题的不同面向。每一张牌都代表着一个独特的视角，它们共同编织出完整的答案。仔细品味每张牌的含义，将它们与你的问题联系起来，你会发现塔罗牌的智慧。记住，塔罗牌是一面镜子，它映照的是你内心深处的智慧和直觉。相信自己，你已经知道答案了。`,
         random: '当你感到迷茫时，塔罗牌为你抽取了这张指引。它可能关于爱情、事业、财运、健康或人际关系，但最重要的是，它反映了你当下的能量状态。静心聆听内心的声音，答案就在你心中。记住，塔罗牌不是预言未来，而是帮助你更好地认识自己，做出明智的选择。',
         celtic: '凯尔特十字是塔罗占卜中最经典、最全面的牌阵。这十张牌从现状、挑战、根源、过去、可能性、未来、态度、环境、内心期待与恐惧，以及最终结果等十个维度，为你揭示了问题的全貌。第1-2张牌显示当前的处境和面临的障碍；第3-4张牌揭示问题的深层原因和过去的影响；第5-6张牌指向最好的可能和即将发生的事；第7-8张牌反映你的态度和外部环境；第9张牌揭示你内心深处的希望与恐惧；第10张牌则预示最终的结果。综合这十张牌的信息，你会对问题有更深刻的理解。记住，塔罗牌是一面镜子，它映照的是你内心的智慧。相信自己的直觉，勇敢面对，你就能找到属于自己的答案。'
     };
@@ -506,6 +580,7 @@ function restart() {
     shuffleArea.classList.add('hidden');
     cutArea.classList.add('hidden');
     cutCardDisplay.classList.add('hidden');
+    customConfig.classList.add('hidden');
     
     selectedCards = [];
     cutCard = null;
@@ -513,6 +588,7 @@ function restart() {
     cardOrientations = [];
     currentSpread = '';
     shuffledDeck = [];
+    customSpreadConfig = null;
     
     // 显示占卜首页
     intro.classList.remove('hidden');
@@ -541,4 +617,107 @@ export function getReadingData() {
         selectedCards,
         cardOrientations
     };
+}
+
+// ==================== 自定义牌阵功能 ====================
+
+// 初始化自定义牌阵配置
+function initCustomConfig() {
+    const customCardCount = document.getElementById('customCardCount');
+    const customPositions = document.getElementById('customPositions');
+    const confirmCustomBtn = document.getElementById('confirmCustomBtn');
+    const cancelCustomBtn = document.getElementById('cancelCustomBtn');
+    
+    if (!customCardCount || !customPositions || !confirmCustomBtn || !cancelCustomBtn) {
+        return;
+    }
+    
+    // 卡牌数量变化时，动态生成牌位输入框
+    customCardCount.addEventListener('input', () => {
+        const count = parseInt(customCardCount.value) || 1;
+        generatePositionInputs(count);
+    });
+    
+    // 确认配置
+    confirmCustomBtn.addEventListener('click', () => {
+        const count = parseInt(customCardCount.value) || 1;
+        const positions = [];
+        
+        // 收集所有牌位名称
+        for (let i = 1; i <= count; i++) {
+            const input = document.getElementById(`position-${i}`);
+            if (input && input.value.trim()) {
+                positions.push(input.value.trim());
+            } else {
+                positions.push(`第${i}张牌`);
+            }
+        }
+        
+        // 保存自定义配置
+        customSpreadConfig = {
+            positions: positions,
+            aspects: Array(count).fill('future') // 默认使用未来维度
+        };
+        
+        // 设置卡牌数量
+        cardsToSelect = count;
+        
+        // 隐藏配置界面，开始占卜
+        customConfig.classList.add('hidden');
+        playSound('select');
+        startReading();
+    });
+    
+    // 取消配置
+    cancelCustomBtn.addEventListener('click', () => {
+        customConfig.classList.add('hidden');
+        intro.classList.remove('hidden');
+        currentSpread = '';
+        customSpreadConfig = null;
+        playSound('select');
+    });
+    
+    // 初始化默认5个牌位
+    generatePositionInputs(5);
+}
+
+// 生成牌位输入框
+function generatePositionInputs(count) {
+    const customPositions = document.getElementById('customPositions');
+    if (!customPositions) return;
+    
+    customPositions.innerHTML = '';
+    
+    for (let i = 1; i <= count; i++) {
+        const positionDiv = document.createElement('div');
+        positionDiv.className = 'position-input';
+        
+        const label = document.createElement('label');
+        label.textContent = `牌位 ${i}：`;
+        label.htmlFor = `position-${i}`;
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = `position-${i}`;
+        input.placeholder = `例如：过去、现在、未来等`;
+        input.maxLength = 20;
+        
+        positionDiv.appendChild(label);
+        positionDiv.appendChild(input);
+        customPositions.appendChild(positionDiv);
+    }
+}
+
+// 显示自定义牌阵配置界面
+function showCustomConfig() {
+    intro.classList.add('hidden');
+    customConfig.classList.remove('hidden');
+    playSound('select');
+    
+    // 重置配置
+    const customCardCount = document.getElementById('customCardCount');
+    if (customCardCount) {
+        customCardCount.value = 5;
+        generatePositionInputs(5);
+    }
 }
