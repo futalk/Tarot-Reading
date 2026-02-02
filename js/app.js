@@ -7,6 +7,7 @@ import { initYesNo } from './modules/yesno.js';
 import { initDivination, getReadingData } from './modules/divination.js';
 import { initDailyCard } from './modules/daily-card.js';
 import { initShareButtons } from './modules/share.js';
+import { initGuided } from './modules/guided.js';
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initYesNo();
     initDivination();
     initDailyCard();
+    initGuided();
     initShareButtons(getReadingData);
     
     // 添加页面加载动画

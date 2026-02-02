@@ -3,10 +3,12 @@ import { playSound } from './audio.js';
 import { generateGallery } from './gallery.js';
 import { loadHistory } from './history.js';
 import { initDailyCard } from './daily-card.js';
+import { resetGuided } from './guided.js';
 
 // 页面元素
 const pages = {
     divination: document.getElementById('divinationPage'),
+    guided: document.getElementById('guidedPage'),
     gallery: document.getElementById('galleryPage'),
     history: document.getElementById('historyPage'),
     yesno: document.getElementById('yesnoPage'),
@@ -72,6 +74,9 @@ export function switchPage(targetPage) {
             break;
         case 'daily':
             initDailyCard();
+            break;
+        case 'guided':
+            resetGuided();
             break;
     }
 }

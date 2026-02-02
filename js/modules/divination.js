@@ -25,36 +25,9 @@ const resultContent = document.getElementById('resultContent');
 const cutCardDisplay = document.getElementById('cutCardDisplay');
 const cutCardContent = document.getElementById('cutCardContent');
 const restartBtn = document.getElementById('restartBtn');
-const questionInput = document.getElementById('questionInput');
 
 // 初始化占卜功能
 export function initDivination() {
-    // 确认问题按钮
-    const confirmQuestionBtn = document.getElementById('confirmQuestionBtn');
-    const questionPage = document.getElementById('questionPage');
-    
-    if (confirmQuestionBtn) {
-        confirmQuestionBtn.addEventListener('click', () => {
-            playSound('select');
-            
-            // 获取用户输入的问题
-            if (questionInput) {
-                userQuestion = questionInput.value.trim();
-            }
-            
-            // 隐藏问题页面，显示占卜选项页面
-            if (questionPage) {
-                questionPage.classList.add('hidden');
-            }
-            intro.classList.remove('hidden');
-            
-            // 平滑滚动到顶部
-            setTimeout(() => {
-                intro.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
-        });
-    }
-    
     // 初始化占卜类型按钮
     document.querySelectorAll('.spread-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -62,6 +35,28 @@ export function initDivination() {
             startReading();
         });
     });
+    
+    // "引导占卜"链接
+    const linkToGuided = document.querySelector('.link-to-guided');
+    if (linkToGuided) {
+        linkToGuided.addEventListener('click', (e) => {
+            e.preventDefault();
+            playSound('select');
+            
+            // 切换到引导占卜页面
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(l => l.classList.remove('active'));
+            const guidedLink = document.querySelector('.nav-link[data-page="guided"]');
+            if (guidedLink) {
+                guidedLink.classList.add('active');
+            }
+            
+            // 导入并调用switchPage
+            import('./navigation.js').then(module => {
+                module.switchPage('guided');
+            });
+        });
+    }
     
     // 重新开始按钮
     if (restartBtn) {
@@ -511,7 +506,6 @@ function restart() {
     shuffleArea.classList.add('hidden');
     cutArea.classList.add('hidden');
     cutCardDisplay.classList.add('hidden');
-    intro.classList.add('hidden');
     
     selectedCards = [];
     cutCard = null;
@@ -520,24 +514,21 @@ function restart() {
     currentSpread = '';
     shuffledDeck = [];
     
-    // 显示问题输入页面
-    const questionPage = document.getElementById('questionPage');
-    if (questionPage) {
-        questionPage.classList.remove('hidden');
-    }
+    // 显示占卜首页
+    intro.classList.remove('hidden');
     
-    // 清空问题输入
-    if (questionInput) {
-        questionInput.value = '';
-        userQuestion = '';
-    }
+    // 清空问题
+    userQuestion = '';
     
     // 滚动到顶部
     setTimeout(() => {
-        if (questionPage) {
-            questionPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        intro.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
+}
+
+// 设置用户问题（供引导占卜使用）
+export function setUserQuestion(question) {
+    userQuestion = question;
 }
 
 // 获取当前占卜数据（供分享功能使用）
