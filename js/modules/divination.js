@@ -5,8 +5,9 @@ import { saveToHistory } from '../utils/storage.js';
 import { detectPatterns, weaveStory } from '../utils/tarot-combinations.js';
 import { getCardEnhancement } from '../data/tarot-enhancements.js';
 import { getCombinationMeaning } from '../data/tarot-combinations.js';
-import { generateAdvancedSummary, formatAdvancedSummary } from '../advanced-summary.js';
-import { identifyContext } from '../contextual-reading.js';
+// 已移除：高级总结功能已被AI解读替代
+// import { generateAdvancedSummary, formatAdvancedSummary } from '../advanced-summary.js';
+// import { identifyContext } from '../contextual-reading.js';
 
 // AI解读模块
 import { getAIReading, displayAIReading, showAILoading, showAIError } from './ai-reading.js';
@@ -389,7 +390,7 @@ async function showResult() {
         resultContent.appendChild(loadingIndicator);
         
         // 创建进度条（如果启用AI，增加一个步骤）
-        const totalSteps = isAIConfigured() ? 6 : 5;
+        const totalSteps = isAIConfigured() ? 5 : 4;
         const progressBar = new ProgressBar(resultContent, totalSteps);
         
         // 步骤1: 显示切牌
@@ -406,13 +407,13 @@ async function showResult() {
             await displayCombinationReading();
         }
         
-        // 步骤4: 生成高级总结（使用缓存）
-        progressBar.update(4, '生成深度洞察...');
-        await displayAdvancedSummary();
+        // 步骤4: 已移除高级总结（功能已被AI解读替代）
+        // progressBar.update(4, '生成深度洞察...');
+        // await displayAdvancedSummary();
         
-        // 步骤5: AI增强解读（如果已启用）
+        // 步骤4: AI增强解读（如果已启用）
         if (isAIConfigured()) {
-            progressBar.update(5, '🤖 AI正在生成深度解读...');
+            progressBar.update(4, '🤖 AI正在生成深度解读...');
             await displayAIInterpretation();
         }
         
@@ -548,31 +549,9 @@ async function displayCombinationReading() {
 
 // 显示高级总结（使用缓存）
 async function displayAdvancedSummary() {
-    const cardsData = selectedCards.map((card, index) => ({
-        name: card.name,
-        reversed: cardOrientations[index] || false
-    }));
-    
-    // 使用缓存的高级总结
-    const advancedSummary = await safeExecute(
-        () => getCachedAdvancedSummary(generateAdvancedSummary, cardsData, userQuestion, currentSpread),
-        () => generateAdvancedSummary(cardsData, userQuestion, currentSpread),
-        '生成高级总结时出错，使用基础版本'
-    );
-    
-    const formattedSummary = formatAdvancedSummary(advancedSummary);
-    
-    // 添加高级总结
-    const summary = document.createElement('div');
-    summary.className = 'card-result advanced-summary';
-    summary.innerHTML = `
-        <h4>✨ 深度解读与洞察</h4>
-        <div class="summary-content">${formattedSummary.replace(/\n/g, '<br>')}</div>
-    `;
-    resultContent.appendChild(summary);
-    
-    // 使高级总结可折叠
-    makeCollapsible(summary, '✨ 深度解读与洞察', true);
+    // 已移除：高级总结功能已被AI解读替代
+    // 现在使用AI解读提供更专业的深度分析
+    console.log('高级总结功能已被AI解读替代');
 }
 
 // 降级方案：显示基础结果（无高级功能）
