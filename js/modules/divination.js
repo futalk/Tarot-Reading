@@ -458,8 +458,8 @@ async function displayCutCard() {
             </div>
         `;
         
-        // 使切牌区域可折叠
-        makeCollapsible(cutCardDisplay, '🎴 切牌解读', false);
+        // 使切牌区域可折叠（默认展开）
+        makeCollapsible(cutCardDisplay, '🎴 切牌解读', true);
     }
 }
 
@@ -531,7 +531,7 @@ async function displayAdvancedSummary() {
     
     // 使用缓存的高级总结
     const advancedSummary = await safeExecute(
-        () => getCachedAdvancedSummary(cardsData, userQuestion, currentSpread),
+        () => getCachedAdvancedSummary(generateAdvancedSummary, cardsData, userQuestion, currentSpread),
         () => generateAdvancedSummary(cardsData, userQuestion, currentSpread),
         '生成高级总结时出错，使用基础版本'
     );

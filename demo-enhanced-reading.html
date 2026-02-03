@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>占卜解读样式演示 - 塔罗牌占卜系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/mobile-optimization.css">
+    <link rel="stylesheet" href="css/reading-output-enhanced.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        .demo-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .demo-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            margin-bottom: 60px;
+        }
+
+        .demo-section-title {
+            font-size: 1.8rem;
+            color: #ffd89b;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(255, 215, 155, 0.3);
+        }
+
+        .feature-badge {
+            display: inline-block;
+            background: rgba(255, 215, 155, 0.2);
+            color: #ffd89b;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 5px;
+            border: 1px solid rgba(255, 215, 155, 0.3);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .feature-card h3 {
+            color: #ffd89b;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .feature-card p {
+            color: #e8e8e8;
+            line-height: 1.6;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- 演示头部 -->
+        <div class="demo-header">
+            <h1>✨ 占卜解读样式演示 ✨</h1>
+            <p>全新优化的视觉体验 - 更美观、更易读、更吸引人</p>
+            <div style="margin-top: 20px;">
+                <span class="feature-badge">🎨 精致渐变</span>
+                <span class="feature-badge">✨ 流畅动画</span>
+                <span class="feature-badge">📱 响应式设计</span>
+                <span class="feature-badge">🌈 视觉层次</span>
+                <span class="feature-badge">💫 交互效果</span>
+            </div>
+        </div>
+
+        <!-- 功能特性展示 -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">🎯 核心优化特性</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>精致视觉设计</h3>
+                    <p>渐变背景、柔和阴影、优雅边框，打造高级感视觉体验</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✨</div>
+                    <h3>流畅动画效果</h3>
+                    <p>卡片滑入、悬停效果、光晕动画，增强交互体验</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📐</div>
+                    <h3>清晰视觉层次</h3>
+                    <p>标题装饰、区块分隔、颜色编码，信息一目了然</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>完美响应式</h3>
+                    <p>适配各种屏幕尺寸，移动端体验同样出色</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>优化排版</h3>
+                    <p>合理间距、舒适行高、易读字号，阅读更轻松</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">♿</div>
+                    <h3>可访问性</h3>
+                    <p>支持减少动画、高对比度模式，关注所有用户</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 占卜结果演示 -->
+        <div class="result">
+            <h3>🔮 你的塔罗占卜结果</h3>
+
+            <!-- 第一张牌 -->
+            <div class="card-result">
+                <span class="card-position">位置一：过去</span>
+                <h4>愚者（正位）</h4>
+                <p class="card-description">新的开始，纯真的冒险，充满可能性的旅程</p>
+                
+                <div class="card-meaning">
+                    <p>愚者牌代表着一个全新的开始，你正站在人生旅程的起点。这张牌象征着纯真、自发性和对未知的信任。在过去，你可能经历了一次重要的转变，放下了旧有的束缚，勇敢地踏上了新的道路。</p>
+                </div>
+
+                <div class="card-enhancement">
+                    <div class="deep-meaning-section">
+                        <h5>深层含义</h5>
+                        <p>愚者的能量提醒我们，有时候最大的智慧就是保持初心。你过去的经历教会了你，真正的成长往往来自于放下恐惧，拥抱未知。这种勇气和信任为你现在的处境奠定了基础，让你能够以开放的心态面对生活的各种可能性。</p>
+                    </div>
+
+                    <div class="action-advice-section">
+                        <h5>行动建议</h5>
+                        <ul>
+                            <li>回顾过去那些勇敢的决定，从中汲取力量和信心</li>
+                            <li>保持对新事物的好奇心和探索精神</li>
+                            <li>不要让过去的经验限制了你对未来的想象</li>
+                            <li>相信直觉，有时候"不知道"也是一种智慧</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第二张牌 -->
+            <div class="card-result">
+                <span class="card-position">位置二：现在</span>
+                <h4>魔术师（正位）</h4>
+                <p class="card-description">创造力、技能、资源的运用，将想法转化为现实</p>
+                
+                <div class="card-meaning">
+                    <p>魔术师牌显示你现在拥有所有必要的工具和资源来实现你的目标。这是一个充满创造力和行动力的时期，你有能力将想法转化为现实。现在是展现你的才能和技能的最佳时机。</p>
+                </div>
+
+                <div class="card-enhancement">
+                    <div class="deep-meaning-section">
+                        <h5>深层含义</h5>
+                        <p>魔术师象征着意识与潜意识的完美结合。你现在处于一个强大的位置，能够调动内在和外在的资源。这张牌提醒你，真正的魔法不在于外部的工具，而在于你如何运用这些工具。你的意图、专注力和行动力将决定结果的质量。</p>
+                    </div>
+
+                    <div class="action-advice-section">
+                        <h5>行动建议</h5>
+                        <ul>
+                            <li>明确你的目标和意图，清晰的愿景是成功的关键</li>
+                            <li>盘点你现有的资源和技能，充分利用它们</li>
+                            <li>将计划付诸行动，不要只停留在想象阶段</li>
+                            <li>保持专注和自律，持续的努力会带来显著成果</li>
+                            <li>相信自己的能力，你比想象中更有力量</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第三张牌 -->
+            <div class="card-result">
+                <span class="card-position">位置三：未来</span>
+                <h4>太阳（正位）</h4>
+                <p class="card-description">成功、喜悦、活力，光明的未来正在等待</p>
+                
+                <div class="card-meaning">
+                    <p>太阳牌预示着一个充满喜悦和成功的未来。这是塔罗牌中最积极的牌之一，象征着温暖、活力和生命力。你的努力将得到回报，前方的道路充满光明和希望。</p>
+                </div>
+
+                <div class="card-enhancement">
+                    <div class="deep-meaning-section">
+                        <h5>深层含义</h5>
+                        <p>太阳的能量代表着真实的自我表达和内在的光芒。未来，你将能够更自信地展现真实的自己，不再需要隐藏或压抑。这种真诚和开放将吸引更多积极的能量和机会进入你的生活。成功不仅仅是外在的成就，更是内在的满足和喜悦。</p>
+                    </div>
+
+                    <div class="action-advice-section">
+                        <h5>行动建议</h5>
+                        <ul>
+                            <li>保持乐观积极的心态，你的能量会影响周围的一切</li>
+                            <li>勇敢地展现真实的自己，不要害怕被看见</li>
+                            <li>分享你的喜悦和成功，让正能量传播开来</li>
+                            <li>享受当下的每一刻，感恩生活中的美好</li>
+                            <li>继续保持热情和活力，这将为你带来更多机会</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 组合解读 -->
+            <div class="combination-reading">
+                <h4>牌组合深度解读</h4>
+                
+                <div class="story-section">
+                    <p class="story-opening">
+                        从愚者到魔术师，再到太阳，这是一个完整的成长和蜕变的故事。你的旅程从纯真的开始，经过技能的掌握，最终走向光明的成功。
+                    </p>
+                    
+                    <p class="story-development">
+                        过去的你像愚者一样，怀着信任和勇气踏上了未知的旅程。那些看似冒险的决定，实际上是你内在智慧的体现。你没有被恐惧束缚，而是选择了相信生活的可能性。
+                    </p>
+                    
+                    <p class="story-climax">
+                        现在，你已经成长为魔术师，掌握了必要的技能和资源。你不再是那个懵懂的初学者，而是一个能够创造和显化的行动者。你的经验和能力让你能够将梦想转化为现实。
+                    </p>
+                    
+                    <p class="story-resolution">
+                        未来，太阳的光芒将照亮你的道路。你的努力和成长将得到丰厚的回报，不仅是物质上的成功，更是内心的喜悦和满足。你将成为自己生命中的光源，照亮自己也温暖他人。
+                    </p>
+                </div>
+
+                <div class="deep-insight">
+                    <p><strong>核心洞察：</strong>这个牌阵揭示了一个从无知到掌握，从潜能到实现的完整循环。你正处于一个强大的转化期，过去的勇气为现在的能力奠定了基础，而现在的行动将创造未来的成功。</p>
+                    <p><strong>关键主题：</strong>信任、创造、显化、成功。这些能量相互支持，形成了一个积极向上的螺旋。</p>
+                    <p><strong>能量流动：</strong>从愚者的开放接纳，到魔术师的主动创造，再到太阳的光明绽放，能量在不断提升和扩展。</p>
+                </div>
+
+                <div class="action-steps">
+                    <p>综合行动指南</p>
+                    <ul>
+                        <li>保持愚者的开放心态，同时运用魔术师的技能和智慧</li>
+                        <li>将过去的经验转化为现在的资源，为未来的成功铺路</li>
+                        <li>相信自己的旅程，每一步都有其意义和价值</li>
+                        <li>积极行动，不要等待完美的时机，现在就是最好的时刻</li>
+                        <li>保持感恩和喜悦，这种能量会吸引更多美好进入你的生活</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 总结区域 -->
+            <div class="summary-section">
+                <h3>整体解读总结</h3>
+                <p style="color: #e8e8e8; line-height: 1.9; font-size: 1.1rem; position: relative; z-index: 1;">
+                    这次占卜显示了一个非常积极和充满希望的能量模式。你的过去为现在奠定了坚实的基础，而你现在的行动正在创造一个光明的未来。关键是要保持信任、运用你的能力，并享受这个成长和显化的过程。
+                </p>
+                
+                <div class="advice-list" style="margin-top: 20px;">
+                    <li>相信你的直觉和内在智慧，它们一直在引导你</li>
+                    <li>充分利用你现有的资源和技能，你比想象中更有力量</li>
+                    <li>保持积极乐观的心态，你的能量会影响结果</li>
+                    <li>享受旅程的每一步，成功不仅在终点，也在过程中</li>
+                    <li>分享你的光芒，你的成功也能启发和帮助他人</li>
+                </div>
+            </div>
+
+            <!-- 高级总结 -->
+            <div class="advanced-summary">
+                <h3>深度洞察与建议</h3>
+                <p style="color: #e8e8e8; line-height: 1.9; font-size: 1.08rem; position: relative; z-index: 1; margin-bottom: 15px;">
+                    <strong style="color: #ffd89b;">能量分析：</strong>整体能量流动非常顺畅，从开放接纳到主动创造，再到成功显化，形成了一个完美的上升螺旋。这表明你正处于一个非常有利的时期，宇宙的能量在支持你的成长和成功。
+                </p>
+                <p style="color: #e8e8e8; line-height: 1.9; font-size: 1.08rem; position: relative; z-index: 1; margin-bottom: 15px;">
+                    <strong style="color: #d4b3ff;">时机建议：</strong>现在是采取行动的最佳时机。不要犹豫或拖延，你已经准备好了。相信自己的能力，勇敢地迈出下一步。
+                </p>
+                <p style="color: #e8e8e8; line-height: 1.9; font-size: 1.08rem; position: relative; z-index: 1;">
+                    <strong style="color: #81c784;">最终祝福：</strong>愿你像愚者一样保持纯真和勇气，像魔术师一样运用智慧和技能，最终像太阳一样绽放光芒，照亮自己的人生道路。✨
+                </p>
+            </div>
+
+            <!-- 切牌展示 -->
+            <div class="cut-card-display">
+                <h3>🎴 切牌：女祭司</h3>
+                <p class="cut-card-meaning">直觉、内在智慧、神秘知识</p>
+                <p style="color: #e8e8e8; line-height: 1.9; font-size: 1.05rem; position: relative; z-index: 1;">
+                    女祭司作为切牌出现，提醒你在这个旅程中要倾听内在的声音。真正的智慧来自于内心深处，而不是外在的喧嚣。在做决定时，给自己一些安静的时间，聆听直觉的指引。你的内在智慧知道什么对你最好。
+                </p>
+            </div>
+        </div>
+
+        <!-- 页脚说明 -->
+        <div style="text-align: center; margin-top: 60px; padding: 30px; background: rgba(255, 255, 255, 0.1); border-radius: 20px; backdrop-filter: blur(10px);">
+            <h3 style="color: #ffd89b; margin-bottom: 15px; font-size: 1.5rem;">✨ 样式优化说明</h3>
+            <p style="color: #e8e8e8; line-height: 1.8; font-size: 1.05rem; max-width: 800px; margin: 0 auto;">
+                本演示页面展示了全新优化的占卜解读输出样式。包括精致的渐变效果、流畅的动画、清晰的视觉层次、优雅的排版设计，以及完善的响应式支持。所有样式都经过精心设计，旨在提供最佳的阅读体验和视觉享受。
+            </p>
+            <div style="margin-top: 20px;">
+                <span class="feature-badge">💎 高级视觉设计</span>
+                <span class="feature-badge">🎭 丰富动画效果</span>
+                <span class="feature-badge">📖 优化阅读体验</span>
+                <span class="feature-badge">🌟 完美细节打磨</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加一些交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为卡片结果添加观察器，实现滚动动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            // 观察所有卡片
+            document.querySelectorAll('.card-result, .combination-reading, .summary-section, .advanced-summary, .cut-card-display').forEach(card => {
+                observer.observe(card);
+            });
+
+            // 添加平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            console.log('✨ 占卜解读样式演示页面已加载');
+            console.log('🎨 所有增强样式已应用');
+        });
+    </script>
+</body>
+</html>
