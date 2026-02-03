@@ -1,12 +1,8 @@
 // 每日一牌模块
+// 每个用户每天会抽到独特的牌（基于用户ID + 日期）
 import { tarotCards } from '../data/tarot-cards.js';
 import { playSound } from './audio.js';
 import { getTodayKey, getTodayCard, saveDailyCard, saveToHistory } from '../utils/storage.js';
-
-console.log('daily-card.js 加载完成');
-console.log('导入的 tarotCards:', tarotCards);
-console.log('tarotCards 是否为数组:', Array.isArray(tarotCards));
-console.log('tarotCards 长度:', tarotCards ? tarotCards.length : 'undefined');
 
 const dailyDrawBtn = document.getElementById('dailyDrawBtn');
 const dailyCardBack = document.getElementById('dailyCardBack');
@@ -24,10 +20,6 @@ const dailyAdvice = document.getElementById('dailyAdvice');
 
 // 初始化每日一牌
 export function initDailyCard() {
-    console.log('initDailyCard 被调用');
-    console.log('dailyDrawBtn:', dailyDrawBtn);
-    console.log('dailyCardBack:', dailyCardBack);
-    
     // 显示今天的日期
     const today = new Date();
     const dateStr = today.toLocaleDateString('zh-CN', {
@@ -42,7 +34,6 @@ export function initDailyCard() {
     
     // 检查今天是否已经抽过牌
     const todayCard = getTodayCard();
-    console.log('getTodayCard 返回:', todayCard);
     
     if (todayCard && todayCard.card) {
         // 今天已经抽过牌，显示结果
@@ -74,31 +65,51 @@ export function initDailyCard() {
     }
 }
 
+// 获取或创建用户唯一ID
+function getUserId() {
+    let userId = localStorage.getItem('tarot_user_id');
+    if (!userId) {
+        // 生成唯一ID（时间戳 + 随机数）
+        userId = Date.now().toString(36) + Math.random().toString(36).substr(2);
+        localStorage.setItem('tarot_user_id', userId);
+    }
+    return userId;
+}
+
+// 简单的字符串哈希函数
+function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash);
+}
+
 // 抽取每日一牌
 function drawDailyCard() {
-    console.log('drawDailyCard 被调用');
     const todayCard = getTodayCard();
-    console.log('todayCard:', todayCard);
     
     // 检查今天是否已经抽过
     if (todayCard && todayCard.card) {
-        console.log('今天已经抽过牌了');
         return;
     }
-    
-    console.log('开始抽取今日牌');
-    console.log('tarotCards.length:', tarotCards.length);
     
     // 播放翻牌音效
     playSound('flip');
     
-    // 使用日期作为种子，确保同一天抽到相同的牌
-    const seed = new Date().setHours(0, 0, 0, 0);
-    // 修复：确保索引在有效范围内 (0 到 length-1)
-    const randomIndex = Math.floor(Math.abs(Math.sin(seed) * 10000)) % tarotCards.length;
-    console.log('randomIndex:', randomIndex);
+    // 使用用户ID + 日期作为种子，确保每个用户每天抽到不同的牌
+    const userId = getUserId();
+    const dateStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const seedStr = userId + dateStr;
+    const seed = hashString(seedStr);
+    
+    // 使用种子生成随机索引
+    const randomIndex = seed % tarotCards.length;
     const randomCard = tarotCards[randomIndex];
-    console.log('randomCard:', randomCard);
+    
+    // 使用种子的另一部分决定正逆位
     const isReversed = (seed % 2) === 0;
     
     // 保存今日牌
@@ -122,19 +133,20 @@ function drawDailyCard() {
 
 // 显示每日一牌
 function displayDailyCard(dailyData) {
-    console.log('displayDailyCard 被调用，参数:', dailyData);
-    
     // 防御性检查
     if (!dailyData || !dailyData.card) {
-        console.error('dailyData 或 dailyData.card 为空:', dailyData);
+        console.error('每日一牌数据错误:', dailyData);
         return;
     }
     
     const { card, isReversed } = dailyData;
-    console.log('card:', card);
-    console.log('isReversed:', isReversed);
-    
     const orientation = isReversed ? 'reversed' : 'upright';
+    
+    // 验证数据结构
+    if (!card[orientation]) {
+        console.error('牌数据结构错误，缺少', orientation, '数据:', card);
+        return;
+    }
     
     if (dailyCardSymbol) {
         // 使用图片而不是emoji
@@ -162,20 +174,21 @@ function displayDailyCard(dailyData) {
         dailyCardDescription.textContent = card.description;
     }
     
+    // 显示四个方面的解读（每个方面内容都不同）
     if (dailyLove) {
-        dailyLove.textContent = card[orientation].love;
+        dailyLove.textContent = card[orientation].love || '暂无解读';
     }
     
     if (dailyCareer) {
-        dailyCareer.textContent = card[orientation].career;
+        dailyCareer.textContent = card[orientation].career || '暂无解读';
     }
     
     if (dailyWealth) {
-        dailyWealth.textContent = card[orientation].wealth;
+        dailyWealth.textContent = card[orientation].wealth || '暂无解读';
     }
     
     if (dailyHealth) {
-        dailyHealth.textContent = card[orientation].health;
+        dailyHealth.textContent = card[orientation].health || '暂无解读';
     }
     
     if (dailyAdvice) {
