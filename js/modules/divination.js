@@ -8,6 +8,10 @@ import { getCombinationMeaning } from '../data/tarot-combinations.js';
 import { generateAdvancedSummary, formatAdvancedSummary } from '../advanced-summary.js';
 import { identifyContext } from '../contextual-reading.js';
 
+// AI解读模块
+import { getAIReading, displayAIReading, showAILoading, showAIError } from './ai-reading.js';
+import { isAIConfigured } from './ai-settings.js';
+
 // 性能优化模块
 import { getCachedAdvancedSummary, summaryCache } from '../utils/performance-cache.js';
 
@@ -318,7 +322,8 @@ function createCardDeck() {
             <div class="card-inner">
                 <div class="card-back-face"></div>
                 <div class="card-front">
-                    <div class="card-symbol">${card.symbol}</div>
+                    <img src="${card.image}" alt="${card.name}" class="card-front-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="card-symbol" style="display:none;">${card.symbol}</div>
                     <div class="card-name">${card.name}</div>
                 </div>
             </div>
@@ -383,8 +388,9 @@ async function showResult() {
         resultContent.innerHTML = '';
         resultContent.appendChild(loadingIndicator);
         
-        // 创建进度条
-        const progressBar = new ProgressBar(resultContent, 5);
+        // 创建进度条（如果启用AI，增加一个步骤）
+        const totalSteps = isAIConfigured() ? 6 : 5;
+        const progressBar = new ProgressBar(resultContent, totalSteps);
         
         // 步骤1: 显示切牌
         progressBar.update(1, '解读切牌...');
@@ -404,7 +410,13 @@ async function showResult() {
         progressBar.update(4, '生成深度洞察...');
         await displayAdvancedSummary();
         
-        // 步骤5: 完成
+        // 步骤5: AI增强解读（如果已启用）
+        if (isAIConfigured()) {
+            progressBar.update(5, '🤖 AI正在生成深度解读...');
+            await displayAIInterpretation();
+        }
+        
+        // 最后步骤: 完成
         progressBar.complete('解读完成！');
         
         // 移除加载指示器
@@ -450,7 +462,13 @@ async function displayCutCard() {
         
         cutCardContent.innerHTML = `
             <div class="card-result">
-                <h4><span ${cutReversedStyle}>${cutCard.symbol}</span> ${cutCard.name} ${cutOrientationText}</h4>
+                <div class="card-result-header">
+                    <div class="card-result-image-container" ${cutReversedStyle}>
+                        <img src="${cutCard.image}" alt="${cutCard.name}" class="card-result-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div class="card-result-symbol" style="display:none;">${cutCard.symbol}</div>
+                    </div>
+                    <h4>${cutCard.name} ${cutOrientationText}</h4>
+                </div>
                 <p>${cutMeaning}</p>
                 <p style="margin-top: 15px; font-style: italic; opacity: 0.9;">
                     这张切牌反映了你对这个问题的潜在心态和能量状态。
@@ -482,7 +500,13 @@ async function displaySelectedCards() {
         
         cardResult.innerHTML = `
             <div class="card-position">${position}</div>
-            <h4 class="${reversedClass}"><span ${reversedStyle}>${card.symbol}</span> ${card.name}</h4>
+            <div class="card-result-header">
+                <div class="card-result-image-container ${reversedClass}" ${reversedStyle}>
+                    <img src="${card.image}" alt="${card.name}" class="card-result-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="card-result-symbol" style="display:none;">${card.symbol}</div>
+                </div>
+                <h4>${card.name}</h4>
+            </div>
             <p class="card-description">${description}</p>
             <p class="card-meaning">${meaning}</p>
             
@@ -566,7 +590,13 @@ async function showBasicResult() {
         
         cardResult.innerHTML = `
             <div class="card-position">${position}</div>
-            <h4><span ${reversedStyle}>${card.symbol}</span> ${card.name}</h4>
+            <div class="card-result-header">
+                <div class="card-result-image-container" ${reversedStyle}>
+                    <img src="${card.image}" alt="${card.name}" class="card-result-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="card-result-symbol" style="display:none;">${card.symbol}</div>
+                </div>
+                <h4>${card.name}</h4>
+            </div>
             <p class="card-description">${description}</p>
             <p class="card-meaning">${meaning}</p>
         `;
@@ -1074,4 +1104,66 @@ function showCustomConfig() {
         customCardCount.value = 5;
         generatePositionInputs(5);
     }
+}
+
+// 显示AI解读
+async function displayAIInterpretation() {
+    // 创建AI解读容器
+    const aiContainer = document.createElement('div');
+    aiContainer.className = 'ai-reading-container';
+    resultContent.appendChild(aiContainer);
+    
+    // 显示加载状态
+    const loadingElement = showAILoading(aiContainer);
+    
+    try {
+        // 准备卡牌数据
+        const cardsData = selectedCards.map((card, index) => ({
+            ...card,
+            isReversed: cardOrientations[index],
+            position: getCardPosition(index)
+        }));
+        
+        // 调用AI解读
+        const aiResult = await getAIReading(cardsData, currentSpread, userQuestion);
+        
+        // 移除加载状态
+        loadingElement.remove();
+        
+        // 显示结果
+        if (aiResult.success) {
+            displayAIReading(aiResult.interpretation, aiContainer, {
+                model: aiResult.model,
+                usage: aiResult.usage
+            });
+        } else {
+            showAIError(aiResult.fallback || aiResult.error, aiContainer);
+        }
+        
+    } catch (error) {
+        console.error('AI解读失败:', error);
+        loadingElement.remove();
+        showAIError('AI解读暂时不可用，请稍后重试', aiContainer);
+    }
+}
+
+// 获取卡牌位置描述
+function getCardPosition(index) {
+    const positions = {
+        random: ['指引'],
+        triangle: ['过去', '现在', '未来'],
+        love: ['你的状态', '对方的状态', '关系走向'],
+        career: ['当前状况', '机遇挑战', '发展方向'],
+        wealth: ['财务现状', '收入来源', '理财建议'],
+        health: ['身体状况', '心理状态', '改善方向'],
+        relationship: ['你的角色', '对方感受', '关系发展'],
+        future: ['近期', '中期', '长期'],
+        elements: ['火（行动）', '水（情感）', '风（思想）', '土（物质）'],
+        relation: ['你', '对方', '过去', '现在', '未来', '你的期待', '对方的期待'],
+        celtic: ['现状', '挑战', '过去', '未来', '上方', '下方', '自己', '环境', '希望恐惧', '结果'],
+        tree: ['王冠', '智慧', '理解', '慈悲', '力量', '美丽', '胜利', '荣耀', '基础', '王国']
+    };
+    
+    const spreadPositions = positions[currentSpread] || [];
+    return spreadPositions[index] || `第${index + 1}张`;
 }

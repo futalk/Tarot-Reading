@@ -145,7 +145,10 @@ function generateEncyclopediaGrid() {
     
     encyclopediaGrid.innerHTML = tarotCards.map(card => `
         <div class="encyclopedia-card" data-card-name="${card.name}">
-            <div class="card-symbol-large">${card.symbol}</div>
+            <div class="card-image-container">
+                <img src="${card.image}" alt="${card.name}" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="card-symbol-large" style="display:none;">${card.symbol}</div>
+            </div>
             <h4>${card.name}</h4>
             <p class="card-brief">${card.description.substring(0, 50)}...</p>
             <button class="btn-view-card" data-card-name="${card.name}">查看详情</button>
@@ -208,7 +211,10 @@ function showCardDetail(cardName) {
     const detailBody = document.getElementById('cardDetailBody');
     detailBody.innerHTML = `
         <div class="card-detail-header">
-            <div class="card-symbol-huge">${card.symbol}</div>
+            <div class="card-image-huge">
+                <img src="${card.image}" alt="${card.name}" class="card-detail-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="card-symbol-huge" style="display:none;">${card.symbol}</div>
+            </div>
             <h2>${card.name}</h2>
         </div>
         

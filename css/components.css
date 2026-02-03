@@ -108,11 +108,27 @@
     border: 3px solid #667eea;
     transform: rotateY(180deg);
     color: #333;
+    padding: 10px;
+}
+
+.card-front-image {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
 .card-symbol {
     font-size: 3rem;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
 }
 
 .card-name {

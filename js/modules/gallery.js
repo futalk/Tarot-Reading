@@ -83,7 +83,10 @@ export function generateGallery(filter = 'all') {
             }
             
             cardElement.innerHTML = `
-                <div class="gallery-card-symbol">${card.symbol}</div>
+                <div class="gallery-card-image">
+                    <img src="${card.image}" alt="${card.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="gallery-card-symbol-fallback" style="display:none;">${card.symbol}</div>
+                </div>
                 <div class="gallery-card-name">${card.name}</div>
                 <div class="gallery-card-desc">${card.description}</div>
                 <div class="gallery-card-meanings">${meaningHTML}</div>

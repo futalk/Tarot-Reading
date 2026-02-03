@@ -137,7 +137,11 @@ function displayDailyCard(dailyData) {
     const orientation = isReversed ? 'reversed' : 'upright';
     
     if (dailyCardSymbol) {
-        dailyCardSymbol.textContent = card.symbol;
+        // 使用图片而不是emoji
+        dailyCardSymbol.innerHTML = `
+            <img src="${card.image}" alt="${card.name}" class="daily-card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <div class="daily-card-symbol-fallback" style="display:none;">${card.symbol}</div>
+        `;
         if (isReversed) {
             dailyCardSymbol.style.transform = 'rotate(180deg)';
         } else {

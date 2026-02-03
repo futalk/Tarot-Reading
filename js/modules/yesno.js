@@ -47,7 +47,13 @@ function performYesNoReading(question) {
     const answer = getYesNoAnswer(randomCard, isReversed);
     
     // 显示结果
-    yesnoCard.textContent = randomCard.symbol;
+    const reversedStyle = isReversed ? 'style="transform: rotate(180deg);"' : '';
+    yesnoCard.innerHTML = `
+        <div class="yesno-card-image-container" ${reversedStyle}>
+            <img src="${randomCard.image}" alt="${randomCard.name}" class="yesno-card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="yesno-card-symbol" style="display:none;">${randomCard.symbol}</div>
+        </div>
+    `;
     yesnoAnswer.textContent = answer.text;
     yesnoAnswer.className = `yesno-answer ${answer.type}`;
     

@@ -9,6 +9,7 @@ import { initDailyCard } from './modules/daily-card.js';
 import { initShareButtons } from './modules/share.js';
 import { initGuided } from './modules/guided.js';
 import { initLearn } from './modules/learn.js';
+import { initAISettings } from './modules/ai-settings.js';
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initGuided();
     initLearn();
     initShareButtons(getReadingData);
+    initAISettings();
     
     // 添加页面加载动画
     document.body.style.opacity = '0';

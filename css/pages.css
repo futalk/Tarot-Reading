@@ -465,6 +465,42 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
+.gallery-card-image {
+    position: relative;
+    width: 120px;
+    height: 200px;
+    margin: 0 auto 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-card:hover .gallery-card-image img {
+    transform: scale(1.05);
+}
+
+.gallery-card-symbol-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+}
+
+/* 保留旧的symbol样式以兼容其他页面 */
 .gallery-card-symbol {
     font-size: 4rem;
     margin-bottom: 15px;
@@ -961,9 +997,31 @@
 }
 
 .daily-card-symbol {
-    font-size: 6rem;
-    margin-bottom: 15px;
+    position: relative;
+    width: 200px;
+    height: 333px;
+    margin: 0 auto 15px;
     animation: bounceIn 0.8s ease;
+}
+
+.daily-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.daily-card-symbol-fallback {
+    font-size: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
 .daily-card-info h3 {
@@ -1260,9 +1318,39 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
+.card-image-container {
+    position: relative;
+    width: 120px;
+    height: 200px;
+    margin: 0 auto 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card-image-container .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.encyclopedia-card:hover .card-image {
+    transform: scale(1.05);
+}
+
 .card-symbol-large {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 4rem;
-    margin-bottom: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
 }
 
 .encyclopedia-card h4 {
@@ -1329,9 +1417,34 @@
     margin-bottom: 30px;
 }
 
+.card-image-huge {
+    position: relative;
+    width: 200px;
+    height: 333px;
+    margin: 0 auto 15px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.card-detail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .card-symbol-huge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 6rem;
-    margin-bottom: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
 }
 
 .card-detail-header h2 {
