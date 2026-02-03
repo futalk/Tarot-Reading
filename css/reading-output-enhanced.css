@@ -1061,9 +1061,11 @@
 
 .card-result-header {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 20px;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .card-result-image-container {
